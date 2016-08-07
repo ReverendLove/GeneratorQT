@@ -99,5 +99,25 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>sbNumberOfDots</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>GeneratorQTClass</receiver>
+   <slot>dotsNumChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>22</x>
+     <y>467</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>319</x>
+     <y>516</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>dotsNumChanged()</slot>
+ </slots>
 </ui>

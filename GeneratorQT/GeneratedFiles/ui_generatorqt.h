@@ -81,6 +81,7 @@ public:
         menuBar->addAction(menu_Regeln->menuAction());
 
         retranslateUi(GeneratorQTClass);
+        QObject::connect(sbNumberOfDots, SIGNAL(valueChanged(int)), GeneratorQTClass, SLOT(dotsNumChanged()));
 
         QMetaObject::connectSlotsByName(GeneratorQTClass);
     } // setupUi

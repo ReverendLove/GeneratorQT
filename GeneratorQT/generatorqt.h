@@ -20,6 +20,7 @@ public:
 
 public slots:
 	void timerEvent();
+	void dotsNumChanged();
 
 
 private:

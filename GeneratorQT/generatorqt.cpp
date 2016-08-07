@@ -53,8 +53,9 @@ GeneratorQT::GeneratorQT(QWidget *parent)
 	
 	timer = new QTimer(this);
 	connect(timer, &QTimer::timeout, this, &GeneratorQT::timerEvent);
+	timer->setTimerType(Qt::PreciseTimer);
 	timer->start(21);
-	// QT-User-Interface wird initialisiert
+	// Qt-User-Interface wird initialisiert
 	ui.setupUi(this);
 }
 
@@ -73,6 +74,31 @@ GeneratorQT::~GeneratorQT(){
 		delete midiOut;
 		midiOut = nullptr;
 	}
+}
+
+void GeneratorQT::dotsNumChanged(){
+	if(dots.size() == ui.sbNumberOfDots->value())
+		return;
+	if(dots.size() < ui.sbNumberOfDots->value()){		
+		for(int i = dots.size(); i < ui.sbNumberOfDots->value(); i++){
+			ADot d;
+			d.X(rand() % 8);
+			d.Y(rand() % 8);
+			d.Dir(rand() % 4);
+			d.Pitch(32 + rand() % 50);
+			d.Vel((27 + rand() % 100));
+			dots.push_back(d);
+			matrix[d.X()][d.Y()] = 1;
+		}
+	}
+	else{
+		for(int i = dots.size(); i > ui.sbNumberOfDots->value(); i--){
+			ADot & d = dots.back();
+			matrix[d.X()][d.Y()] = 0;
+			dots.pop_back();
+		}
+	}
+	update();
 }
 
 void GeneratorQT::timerEvent(){
@@ -130,7 +156,9 @@ void GeneratorQT::timerEvent(){
 				}
 				break;
 			}
+			matrix[x][y] = 0;
 		}
+		matrix[d.X()][d.Y()] = 1;
 		update();
 	}
 	tickCounter++;
