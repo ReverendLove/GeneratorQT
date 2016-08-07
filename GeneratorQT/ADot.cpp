@@ -9,18 +9,35 @@
 */
 
 #include "ADot.h"
+
 int ADot::counter{0};
 int ADot::lastId{0};
-//std::array<double, 28> ADot::relSpeed = {0.0, 1.0, 1.3333333333, 2.0, 3.0, 2.6666666667, 4.0, 6.0, 5.3333333333, 8.0, 12.0, 10.6666666667, \
-//											16.0, 24.0, 21.3333333333, 32.0, 48.0, 64.0, 128.0, 192.0, 256.0, 320.0, 384.0, 448.0, 512.0, \
-//											768.0, 1024.0, 2048.0};
-std::array<ADot::note_value, 27> speedTable = {ADot::note_value::TNONE, ADot::note_value::T32NDT, ADot::note_value::T32ND, ADot::note_value::T32NDD, \
-												ADot::note_value::T16THT, ADot::note_value::T16TH, ADot::note_value::T16THD, ADot::note_value::T8THT, \
-												ADot::note_value::T8TH, ADot::note_value::T8THD, ADot::note_value::T4THT, ADot::note_value::T4TH, \
-												ADot::note_value::T4THD, ADot::note_value::T2NDT, ADot::note_value::T2ND, ADot::note_value::T2NDD, \
-												ADot::note_value::T1, ADot::note_value::T2, ADot::note_value::T3, ADot::note_value::T4, \
-												ADot::note_value::T5, ADot::note_value::T6, ADot::note_value::T7, ADot::note_value::T8, \
-												ADot::note_value::T12, ADot::note_value::T16, ADot::note_value::T32};
+bool ADot::staticInit{false};
+std::array<double, 27> ADot::relSpeed{0.0, 2.0, 3.0, 2.6666666667, 4.0, 6.0, 5.3333333333, 8.0, 12.0, 10.6666666667, \
+										16.0, 24.0, 21.3333333333, 32.0, 48.0, 64.0, 128.0, 192.0, 256.0, 320.0, 384.0, 448.0, 512.0, \
+										768.0, 1024.0, 2048.0};
+
+std::array<ADot::note_value, 27> ADot::speedTable{ADot::note_value::TNONE, ADot::note_value::T32NDT, ADot::note_value::T32ND, ADot::note_value::T32NDD, \
+													ADot::note_value::T16THT, ADot::note_value::T16TH, ADot::note_value::T16THD, ADot::note_value::T8THT, \
+													ADot::note_value::T8TH, ADot::note_value::T8THD, ADot::note_value::T4THT, ADot::note_value::T4TH, \
+													ADot::note_value::T4THD, ADot::note_value::T2NDT, ADot::note_value::T2ND, ADot::note_value::T2NDD, \
+													ADot::note_value::T1, ADot::note_value::T2, ADot::note_value::T3, ADot::note_value::T4, \
+													ADot::note_value::T5, ADot::note_value::T6, ADot::note_value::T7, ADot::note_value::T8, \
+													ADot::note_value::T12, ADot::note_value::T16, ADot::note_value::T32};
+
+std::vector<std::string> ADot::timeStrings{"Random", "1/32T", "1/32", "1/32*", "1/16T", "1/16", "1/16*", "1/8T", "1/8", "1/8*", "1/4T", "1/4", "1/4*", \
+											"1/2T", "1/2", "1/2*", "1/1", "1/2", "1/3", "1/4", "1/5", "1/6", "1/7", "1/8", "1/12", "1/16", "1/32"};
+
+std::map<ADot::note_value, std::string> ADot::valueMap{ADot::initSpeedMap()};
+
+std::map<ADot::note_value, std::string> ADot::initSpeedMap(){
+	std::map<ADot::note_value, std::string> tmap;
+	for(int i = 0; i < 27; i++){
+		tmap.insert(std::make_pair(ADot::speedTable[i], ADot::timeStrings[i]));
+	}
+	return tmap;
+}
+
 
 ADot::ADot()
 {	counter++;

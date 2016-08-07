@@ -9,6 +9,7 @@
 #include <string>
 #include <chrono>
 #include <QTimer>
+#include <math.h>
 
 class GeneratorQT : public QMainWindow
 {
@@ -18,9 +19,16 @@ public:
 	GeneratorQT(QWidget *parent = 0);
 	~GeneratorQT();
 
+	int bpm_to_msec_per_tic(int bpm = 120){
+		double dmsec = (dmsec = 2500 / bpm);
+		return round(dmsec);
+	};
+
+
 public slots:
 	void timerEvent();
 	void dotsNumChanged();
+	void slSpeedChanged(int);
 
 
 private:
@@ -53,6 +61,9 @@ private:
 		return matrix[x][y];
 	}
 	void rollPos(ADot& d);
+	void pushDot(ADot&d, bool randomly = false);
+
+	void fillDotsTable();
 
 };
 

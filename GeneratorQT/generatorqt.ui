@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>816</width>
+    <width>953</width>
     <height>606</height>
    </rect>
   </property>
@@ -70,13 +70,175 @@
      <number>10</number>
     </property>
    </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>400</y>
+      <width>48</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>BPM</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="lblSpeed">
+       <property name="text">
+        <string>BPM</string>
+       </property>
+       <property name="buddy">
+        <cstring>slSpeed</cstring>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QTableWidget" name="tblDots">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>10</y>
+      <width>245</width>
+      <height>400</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="cursor" stdset="0">
+     <cursorShape>UpArrowCursor</cursorShape>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="sizeAdjustPolicy">
+     <enum>QAbstractScrollArea::AdjustToContents</enum>
+    </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::NoEditTriggers</set>
+    </property>
+    <property name="alternatingRowColors">
+     <bool>true</bool>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::SingleSelection</enum>
+    </property>
+    <property name="selectionBehavior">
+     <enum>QAbstractItemView::SelectRows</enum>
+    </property>
+    <property name="sortingEnabled">
+     <bool>true</bool>
+    </property>
+    <property name="wordWrap">
+     <bool>false</bool>
+    </property>
+    <property name="cornerButtonEnabled">
+     <bool>false</bool>
+    </property>
+    <property name="rowCount">
+     <number>32</number>
+    </property>
+    <property name="columnCount">
+     <number>5</number>
+    </property>
+    <attribute name="horizontalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderDefaultSectionSize">
+     <number>45</number>
+    </attribute>
+    <attribute name="horizontalHeaderHighlightSections">
+     <bool>true</bool>
+    </attribute>
+    <attribute name="horizontalHeaderMinimumSectionSize">
+     <number>0</number>
+    </attribute>
+    <attribute name="verticalHeaderVisible">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="verticalHeaderDefaultSectionSize">
+     <number>16</number>
+    </attribute>
+    <attribute name="verticalHeaderMinimumSectionSize">
+     <number>12</number>
+    </attribute>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <column>
+     <property name="text">
+      <string>Id</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Note</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Value</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Gate</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Vel</string>
+     </property>
+    </column>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>816</width>
+     <width>953</width>
      <height>21</height>
     </rect>
    </property>
@@ -88,14 +250,17 @@
    <addaction name="menu_Regeln"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="separator"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
@@ -111,13 +276,46 @@
      <y>467</y>
     </hint>
     <hint type="destinationlabel">
-     <x>319</x>
-     <y>516</y>
+     <x>23</x>
+     <y>485</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slSpeed</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>GeneratorQTClass</receiver>
+   <slot>slSpeedChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>465</x>
+     <y>290</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>398</x>
+     <y>421</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slSpeed</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>lblSpeed</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>469</x>
+     <y>397</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>486</x>
+     <y>446</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
   <slot>dotsNumChanged()</slot>
+  <slot>slSpeedChanged(int)</slot>
  </slots>
 </ui>

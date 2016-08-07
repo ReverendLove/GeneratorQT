@@ -13,16 +13,9 @@ GeneratorQT::GeneratorQT(QWidget *parent)
 	
 	for(int i = 0; i < 2; i++){
 		ADot d;
-		d.X(rand() % 8);
-		d.Y(rand() % 8);
-		d.Dir(rand() % 4);
-		d.Pitch(32 + rand() % 50);
-		d.Vel((27 + rand() % 100));
-		dots.push_back(d);
+		pushDot(d, true);		
 	}
 	fillMatrix();
-	//mainTimer->Interval = 21;
-
 	try{
 		midiOut = new RtMidiOut();
 	}
@@ -54,9 +47,12 @@ GeneratorQT::GeneratorQT(QWidget *parent)
 	timer = new QTimer(this);
 	connect(timer, &QTimer::timeout, this, &GeneratorQT::timerEvent);
 	timer->setTimerType(Qt::PreciseTimer);
-	timer->start(21);
+	timer->start(bpm_to_msec_per_tic(120));
 	// Qt-User-Interface wird initialisiert
 	ui.setupUi(this);
+	ui.sbNumberOfDots->setValue(2);
+	ui.slSpeed->setValue(120);
+	fillDotsTable();
 }
 
 GeneratorQT::~GeneratorQT(){
@@ -77,17 +73,10 @@ GeneratorQT::~GeneratorQT(){
 }
 
 void GeneratorQT::dotsNumChanged(){
-	if(dots.size() == ui.sbNumberOfDots->value())
-		return;
 	if(dots.size() < ui.sbNumberOfDots->value()){		
 		for(int i = dots.size(); i < ui.sbNumberOfDots->value(); i++){
 			ADot d;
-			d.X(rand() % 8);
-			d.Y(rand() % 8);
-			d.Dir(rand() % 4);
-			d.Pitch(32 + rand() % 50);
-			d.Vel((27 + rand() % 100));
-			dots.push_back(d);
+			pushDot(d, true);
 			matrix[d.X()][d.Y()] = 1;
 		}
 	}
@@ -98,7 +87,13 @@ void GeneratorQT::dotsNumChanged(){
 			dots.pop_back();
 		}
 	}
+	fillDotsTable();
 	update();
+}
+
+void GeneratorQT::slSpeedChanged(int b){
+	if(timer!=nullptr)
+		timer->start(bpm_to_msec_per_tic(b));
 }
 
 void GeneratorQT::timerEvent(){
@@ -183,10 +178,18 @@ void GeneratorQT::paintEvent(QPaintEvent *event){
 		}
 	}
 
-	p.setPen(Qt::red);
+	
 	p.setBrush(Qt::red);
+	QPoint pt;
 	for(ADot& d : dots){
+		p.setPen(Qt::red);
 		p.drawEllipse(QRect(x + 5 + d.X() * 50, y + 5 + d.Y() * 50, 40, 40));
+		p.setPen(Qt::black);
+		pt.setX(x + 12 + d.X() * 50);
+		pt.setY(y + 25 + d.Y() * 50);
+		QString sId; 
+		sId.setNum(d.Id());
+		p.drawText(pt, sId);
 	}	
 }
 
@@ -202,7 +205,7 @@ void GeneratorQT::midiInCallback(double deltatime, std::vector<unsigned char>* m
 			}
 			if(nCounter % 24 == 0){ //Durchschnitt für 24 Ticks berechnen
 				delta = std::chrono::system_clock::now() - start;
-				gSpeed = delta.count() / (1000000 * 24); // msec für einen Tick in static-Variablen gSpeed ablegen
+				gSpeed = round(delta.count() / (1000000 * 24)); // msec für einen Tick in static-Variablen gSpeed ablegen
 			}
 			nCounter++;
 			break;
@@ -236,7 +239,7 @@ void GeneratorQT::noteOn(ADot& d){
 }
 
 void GeneratorQT::rollPos(ADot & d){
-	// Anfangspunkt für die Suche nach einem freien Feld ist diagonal untn rechts
+	// Anfangspunkt für die Suche nach einem freien Feld ist diagonal unten rechts
 	// Bei Überschreiten der Spielfeldgrenzen wird ganz links und/oder ganz oben
 	// mit der Suche begonnen.
 	int ix{(d.X() + 1) % 8};
@@ -261,4 +264,28 @@ void GeneratorQT::rollPos(ADot & d){
 		d.X(rand() % 8);
 		d.Dir(d.Dir() + 1); // Im Uhrzeigersinn drehen
 	}
+}
+
+void GeneratorQT::pushDot(ADot & d, bool randomly){
+	if(randomly == true){
+		d.X(rand() % 8);
+		d.Y(rand() % 8);
+		d.Dir(rand() % 4);
+		d.Pitch(32 + rand() % 50);
+		d.Vel((27 + rand() % 100));
+	}
+	dots.push_back(d);	
+}
+
+void GeneratorQT::fillDotsTable(){
+	int r = 0;
+	ui.tblDots->clearContents();
+	for(ADot& d : dots){		
+		ui.tblDots->setItem(r, 0, new QTableWidgetItem(tr("%1").arg(d.Id())));
+		ui.tblDots->setItem(r, 1, new QTableWidgetItem(tr("%1").arg(d.Pitch())));
+		ui.tblDots->setItem(r, 2, new QTableWidgetItem(tr(d.SpeedStr().c_str())));
+		ui.tblDots->setItem(r, 3, new QTableWidgetItem(tr(d.LengthStr().c_str())));
+		ui.tblDots->setItem(r, 4, new QTableWidgetItem(tr("%1").arg(d.Vel())));
+		r++;
+	}	
 }
