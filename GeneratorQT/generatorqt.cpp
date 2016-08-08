@@ -151,7 +151,7 @@ void GeneratorQT::timerEvent(){
 				}
 				break;
 			}
-			matrix[x][y] = 0;
+			//matrix[x][y] = 0;
 		}
 		matrix[d.X()][d.Y()] = 1;
 		update();
@@ -239,17 +239,36 @@ void GeneratorQT::noteOn(ADot& d){
 }
 
 void GeneratorQT::rollPos(ADot & d){
-	// Anfangspunkt für die Suche nach einem freien Feld ist diagonal unten rechts
+	// Anfangspunkt für die Suche nach einem freien Feld ist einer Springerbewegung beim Schach gleich
 	// Bei Überschreiten der Spielfeldgrenzen wird ganz links und/oder ganz oben
 	// mit der Suche begonnen.
-	int ix{(d.X() + 1) % 8};
-	int jy{(d.Y() + 1) % 8};
+	int ix, jy;
+	switch(d.Dir()){
+	case ADot::UP:
+		ix = (d.X() + 1) % 8;
+		jy = d.Y() > 1 ? (d.Y() - 2) % 8 : (d.Y() + 7) % 8;
+		break;
+	case ADot::DOWN:
+		ix = d.X() > 0 ? (d.X() - 1) % 8 : 7;
+		jy = (d.Y() + 2) % 8;
+		break;
+	case ADot::LEFT:
+		ix = (d.X() + 2) % 8;
+		jy = (d.Y() + 1) % 8;
+		break;
+	case ADot::RIGHT:
+		ix = d.X() > 1 ? (d.X() - 2) % 8 : (d.X() + 7) % 8;;
+		jy = (d.Y() + 1) % 8;
+		break;
+	}
+	
+	
 	bool success{false};
 	for(int i = ix; i < 8 + ix; i++){
 		for(int j = jy; j < 8 + jy; j++){
 			if(matrix[i % 8][j % 8] == 0){
 				d.X(i % 8);
-				d.Y(j % 8);
+				d.Y(j % 8);		
 				d.Dir(d.Dir() + 1); // Im Uhrzeigersinn drehen
 				matrix[i % 8][j % 8] = 1;
 				success = true;

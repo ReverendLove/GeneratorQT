@@ -90,15 +90,16 @@ private:
 	unsigned char pitch{60};
 	note_value length{note_value::T4TH};
 	note_value value{note_value::T4TH};
-	
+	//////////////////////DON'T FORGET/////////////////////////////////
+	// Deklarationsreihenfolge bestimmt die Initialisierungreihenfolge!
 	static int counter;
 	static int lastId;
-	static bool staticInit;
 	static std::vector<std::string> timeStrings;
 	static std::array<double, 27> relSpeed;
 	static std::array<note_value, 27> speedTable;
 	static std::map<note_value, std::string> valueMap;
-
-	static std::map<note_value, std::string>  initSpeedMap();
+	static bool staticInit; // Wird zuletzt mit  initSpeedmap, das die valueMap konstruiert, initialisiert
+							// timeStrings und speedTabele müssen also schon fertig sein!	
+	static bool initSpeedMap();
 };
 #endif  // ADOT_H_INCLUDED
