@@ -1,5 +1,6 @@
 #include "generatorqt.h"
 #include <QPainter>
+#include <algorithm>
 
 
 unsigned GeneratorQT::tickCounter{0};
@@ -163,6 +164,7 @@ void GeneratorQT::timerEvent(){
 void GeneratorQT::paintEvent(QPaintEvent *event){
 	QMainWindow::update();
 	
+	// Schachbrett zeichnen
 	QPainter p(this);
 	QRect rect = ui.wdgCentral->rect();
 	int x = rect.left();
@@ -178,7 +180,7 @@ void GeneratorQT::paintEvent(QPaintEvent *event){
 		}
 	}
 
-	
+	// ADots ("Spielsteine") zeichnen
 	p.setBrush(Qt::red);
 	QPoint pt;
 	for(ADot& d : dots){
@@ -190,7 +192,25 @@ void GeneratorQT::paintEvent(QPaintEvent *event){
 		QString sId; 
 		sId.setNum(d.Id());
 		p.drawText(pt, sId);
-	}	
+	}
+
+	// Durch Anwender ausgewählten Spielstein gelb zeichnen
+	if(!ui.tblDots->selectedItems().isEmpty()){ // Ist eine Zeile in der Tabelle ausgewählt?
+		int t_row = ui.tblDots->currentRow();
+		int nActiveDot = ui.tblDots->item(t_row, 0)->text().toInt(); // In der ersten Spalte (0) steht die Id des ADots
+		auto di = std::find_if(dots.begin(), dots.end(), [=](ADot& a) -> bool {return a.Id() == nActiveDot; });
+		ADot& ad = *di;
+		// Ausgewählter ADot wird gelb
+		p.setBrush(Qt::yellow);
+		p.setPen(Qt::yellow);
+		p.drawEllipse(QRect(x + 5 + ad.X() * 50, y + 5 + ad.Y() * 50, 40, 40));
+		p.setPen(Qt::black);
+		pt.setX(x + 12 + ad.X() * 50);
+		pt.setY(y + 25 + ad.Y() * 50);
+		QString sId;
+		sId.setNum(ad.Id());
+		p.drawText(pt, sId);
+	}
 }
 
 void GeneratorQT::midiInCallback(double deltatime, std::vector<unsigned char>* message, void * userData){

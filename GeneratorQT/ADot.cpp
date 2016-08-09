@@ -34,7 +34,7 @@ bool ADot::staticInit = ADot::initSpeedMap();
 
 bool ADot::initSpeedMap(){
 	try{
-		for(int i = 0; i < speedTable.size(); i++){
+		for(int i = 0; i < timeStrings.size() && i < speedTable.size(); i++){
 			valueMap.insert(std::make_pair(ADot::speedTable[i], ADot::timeStrings[i]));
 		}
 	}
