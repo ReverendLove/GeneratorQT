@@ -29,6 +29,7 @@ public slots:
 	void timerEvent();
 	void dotsNumChanged();
 	void slSpeedChanged(int);
+	void editDot();
 
 
 private:

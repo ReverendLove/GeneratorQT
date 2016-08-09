@@ -152,6 +152,7 @@ public:
         QObject::connect(sbNumberOfDots, SIGNAL(valueChanged(int)), GeneratorQTClass, SLOT(dotsNumChanged()));
         QObject::connect(slSpeed, SIGNAL(valueChanged(int)), GeneratorQTClass, SLOT(slSpeedChanged(int)));
         QObject::connect(slSpeed, SIGNAL(valueChanged(int)), lblSpeed, SLOT(setNum(int)));
+        QObject::connect(tblDots, SIGNAL(doubleClicked(QModelIndex)), GeneratorQTClass, SLOT(editDot()));
 
         QMetaObject::connectSlotsByName(GeneratorQTClass);
     } // setupUi

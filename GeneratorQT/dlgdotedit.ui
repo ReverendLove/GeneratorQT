@@ -9,18 +9,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>303</width>
+    <height>276</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>dlgDotEdit</string>
+   <string>Spielsteine ändern</string>
   </property>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>210</x>
-     <y>260</y>
+     <x>10</x>
+     <y>250</y>
      <width>156</width>
      <height>23</height>
     </rect>
@@ -29,6 +29,208 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
+  <widget class="QComboBox" name="cbValue">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>69</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblValue">
+   <property name="geometry">
+    <rect>
+     <x>85</x>
+     <y>50</y>
+     <width>47</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Value</string>
+   </property>
+   <property name="buddy">
+    <cstring>cbValue</cstring>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cbGate">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>90</y>
+     <width>69</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblGate">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>90</y>
+     <width>47</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Gate</string>
+   </property>
+   <property name="buddy">
+    <cstring>cbGate</cstring>
+   </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>11</x>
+     <y>11</y>
+     <width>124</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QComboBox" name="cbNote"/>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblNote">
+      <property name="text">
+       <string>Note</string>
+      </property>
+      <property name="buddy">
+       <cstring>cbNote</cstring>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QLabel" name="lblVelocity_2">
+   <property name="geometry">
+    <rect>
+     <x>399</x>
+     <y>239</y>
+     <width>47</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Velocity</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>10</y>
+     <width>67</width>
+     <height>211</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <item>
+     <widget class="QLabel" name="lblVarianzValue">
+      <property name="text">
+       <string>Varianz</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSlider" name="slVarianz">
+      <property name="maximum">
+       <number>47</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>10</y>
+     <width>67</width>
+     <height>211</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QLabel" name="lblVelocityValue">
+      <property name="text">
+       <string>Velocity</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSlider" name="slVelocity">
+      <property name="maximum">
+       <number>127</number>
+      </property>
+      <property name="value">
+       <number>80</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>220</y>
+     <width>141</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <item>
+     <widget class="QLabel" name="lblVelocity">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Velocity</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblVarianz">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Varianz</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <zorder>layoutWidget</zorder>
+  <zorder>buttonBox</zorder>
+  <zorder>cbValue</zorder>
+  <zorder>lblValue</zorder>
+  <zorder>cbGate</zorder>
+  <zorder>lblGate</zorder>
+  <zorder>layoutWidget</zorder>
+  <zorder>layoutWidget</zorder>
+  <zorder>lblVelocity_2</zorder>
+  <zorder>layoutWidget_2</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
@@ -40,12 +242,12 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>238</x>
-     <y>267</y>
+     <x>45</x>
+     <y>262</y>
     </hint>
     <hint type="destinationlabel">
-     <x>185</x>
-     <y>157</y>
+     <x>67</x>
+     <y>245</y>
     </hint>
    </hints>
   </connection>
@@ -56,14 +258,65 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>331</x>
-     <y>266</y>
+     <x>124</x>
+     <y>255</y>
     </hint>
     <hint type="destinationlabel">
-     <x>346</x>
-     <y>136</y>
+     <x>302</x>
+     <y>259</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slVelocity</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>lblVelocityValue</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>206</x>
+     <y>200</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>162</x>
+     <y>115</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slVarianz</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>lblVarianzValue</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>279</x>
+     <y>214</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>242</x>
+     <y>128</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slVelocity</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>dlgDotEdit</receiver>
+   <slot>varianzMax(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>207</x>
+     <y>90</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>97</x>
+     <y>147</y>
     </hint>
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>varianzMax(int)</slot>
+ </slots>
 </ui>

@@ -12,8 +12,7 @@
 #include <exception>
 #include <iostream>
 
-int ADot::counter{0};
-int ADot::lastId{0};
+
 std::array<double, 27> ADot::relSpeed{0.0, 2.0, 3.0, 2.6666666667, 4.0, 6.0, 5.3333333333, 8.0, 12.0, 10.6666666667, \
 										16.0, 24.0, 21.3333333333, 32.0, 48.0, 64.0, 128.0, 192.0, 256.0, 320.0, 384.0, 448.0, 512.0, \
 										768.0, 1024.0, 2048.0};
@@ -30,13 +29,31 @@ std::vector<std::string> ADot::timeStrings{"Random", "1/32T", "1/32", "1/32*", "
 											"1/2T", "1/2", "1/2*", "1/1", "1/2", "1/3", "1/4", "1/5", "1/6", "1/7", "1/8", "1/12", "1/16", "1/32"};
 
 std::map<ADot::note_value, std::string> ADot::valueMap{};
+std::map<std::string, ADot::note_value> ADot::valueAsStringMap{};
+std::vector<std::string> ADot::midiNotes;
+std::map<std::string, int> ADot::midiNotesStringMap;
+
+int ADot::counter{0};
+int ADot::lastId{0};
+
 bool ADot::staticInit = ADot::initSpeedMap();
 
 bool ADot::initSpeedMap(){
 	try{
 		for(int i = 0; i < timeStrings.size() && i < speedTable.size(); i++){
 			valueMap.insert(std::make_pair(ADot::speedTable[i], ADot::timeStrings[i]));
+			valueAsStringMap.insert(std::make_pair(ADot::timeStrings[i], ADot::speedTable[i]));
 		}
+		std::vector<std::string> twelve{"C", "C#", "D", "D#", "E", "F", "F#", "G", "Ab", "A", "Bb", "H"};
+		for(int i = 0; i < 128; i++){
+			std::string s = twelve[i % 12];
+			if(i < 120)
+				s += char('0' + i / 12);
+			else
+				s += "10";
+			midiNotes.push_back(s);
+			midiNotesStringMap.insert(std::make_pair(s, i));
+		}			
 	}
 	catch(std::exception& ex){
 		std::cerr << "Exception in ADot::initSpeedmap(): " << ex.what() << std::endl;

@@ -313,9 +313,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>tblDots</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>GeneratorQTClass</receiver>
+   <slot>editDot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>607</x>
+     <y>193</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>768</x>
+     <y>100</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>dotsNumChanged()</slot>
   <slot>slSpeedChanged(int)</slot>
+  <slot>editDot()</slot>
  </slots>
 </ui>

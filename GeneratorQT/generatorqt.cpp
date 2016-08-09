@@ -1,4 +1,5 @@
 #include "generatorqt.h"
+#include "dlgdotedit.hpp"
 #include <QPainter>
 #include <algorithm>
 
@@ -95,6 +96,33 @@ void GeneratorQT::dotsNumChanged(){
 void GeneratorQT::slSpeedChanged(int b){
 	if(timer!=nullptr)
 		timer->start(bpm_to_msec_per_tic(b));
+}
+
+void GeneratorQT::editDot(){
+	dlgDotEdit dEdit(this);
+	
+	int t_row = ui.tblDots->currentRow();
+	int nActiveDot = ui.tblDots->item(t_row, 0)->text().toInt(); // In der ersten Spalte (0) steht die Id des ADots
+	auto di = std::find_if(dots.begin(), dots.end(), [&nActiveDot](ADot& a) -> bool{return a.Id() == nActiveDot; });
+	ADot& ad = *di;
+	dEdit.note_values(ADot::timeStrings);
+	dEdit.gate_values(ADot::timeStrings);
+	dEdit.notes(ADot::midiNotes);
+	dEdit.note(ad.Pitch());
+	dEdit.velocity(ad.Vel());
+	dEdit.timeValue(ADot::valueMap[ad.Speed()]);
+
+	if(dEdit.exec() == QDialog::Accepted){
+		ad.Pitch(dEdit.note());
+		ad.Speed(ADot::speedTable[dEdit.timeValue()]);
+		ad.Vel(dEdit.velocity());
+
+		//ui.tblDots->setItem(t_row, 0, new QTableWidgetItem(tr("%1").arg(ad.Id())));
+		ui.tblDots->setItem(t_row, 1, new QTableWidgetItem(tr("%1").arg(ADot::midiNotes[ad.Pitch()].c_str())));
+		ui.tblDots->setItem(t_row, 2, new QTableWidgetItem(tr(ad.SpeedStr().c_str())));
+		//ui.tblDots->setItem(t_row, 3, new QTableWidgetItem(tr(ad.LengthStr().c_str())));
+		ui.tblDots->setItem(t_row, 4, new QTableWidgetItem(tr("%1").arg(ad.Vel())));
+	}	
 }
 
 void GeneratorQT::timerEvent(){
@@ -198,7 +226,7 @@ void GeneratorQT::paintEvent(QPaintEvent *event){
 	if(!ui.tblDots->selectedItems().isEmpty()){ // Ist eine Zeile in der Tabelle ausgewählt?
 		int t_row = ui.tblDots->currentRow();
 		int nActiveDot = ui.tblDots->item(t_row, 0)->text().toInt(); // In der ersten Spalte (0) steht die Id des ADots
-		auto di = std::find_if(dots.begin(), dots.end(), [=](ADot& a) -> bool {return a.Id() == nActiveDot; });
+		auto di = std::find_if(dots.begin(), dots.end(), [&nActiveDot](ADot& a) -> bool {return a.Id() == nActiveDot; });
 		ADot& ad = *di;
 		// Ausgewählter ADot wird gelb
 		p.setBrush(Qt::yellow);
@@ -321,7 +349,7 @@ void GeneratorQT::fillDotsTable(){
 	ui.tblDots->clearContents();
 	for(ADot& d : dots){		
 		ui.tblDots->setItem(r, 0, new QTableWidgetItem(tr("%1").arg(d.Id())));
-		ui.tblDots->setItem(r, 1, new QTableWidgetItem(tr("%1").arg(d.Pitch())));
+		ui.tblDots->setItem(r, 1, new QTableWidgetItem(tr("%1").arg(ADot::midiNotes[d.Pitch()].c_str())));
 		ui.tblDots->setItem(r, 2, new QTableWidgetItem(tr(d.SpeedStr().c_str())));
 		ui.tblDots->setItem(r, 3, new QTableWidgetItem(tr(d.LengthStr().c_str())));
 		ui.tblDots->setItem(r, 4, new QTableWidgetItem(tr("%1").arg(d.Vel())));
