@@ -130,9 +130,9 @@ void GeneratorQT::timerEvent(){
 	for(ADot& d : dots){
 		unsigned int nValue = d.Value() == ADot::note_value::TNONE ? rand() % 48 + 8 : unsigned int(d.Value());
 		unsigned int nGate = d.Gate() == ADot::note_value::TNONE ? rand() % 48 + 8 : unsigned int(d.Gate());
-		if(tickCounter % nGate == 0 && d.Plays()){
+		
+		if(d.Plays() && tickCounter >= d.Activated() + unsigned long long(d.Gate()))
 			noteOff(d);
-		}
 		if( tickCounter % nValue == 0){
 			int x = d.X();
 			int y = d.Y();
@@ -186,7 +186,6 @@ void GeneratorQT::timerEvent(){
 				}
 				break;
 			}
-			//matrix[x][y] = 0;
 		}
 		matrix[d.X()][d.Y()] = 1;
 		update();
@@ -289,18 +288,16 @@ void GeneratorQT::noteOn(ADot& d){
 	mgv.push_back(d.Pitch());
 	mgv.push_back(d.Vel());
 	midiOut->sendMessage(&mgv);
-	d.Plays(true);
+	d.Activate(tickCounter);
 }
 
 void GeneratorQT::noteOff(ADot & d){
-	if(!d.Plays())
-		return;
 	std::vector<unsigned char> mgv;
 
 	mgv.push_back('\x80');
 	mgv.push_back(d.Pitch());
 	midiOut->sendMessage(&mgv);
-	d.Plays(false);
+	d.Deactivate();
 }
 
 void GeneratorQT::rollPos(ADot & d){

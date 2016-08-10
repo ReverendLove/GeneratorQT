@@ -98,11 +98,26 @@ public:
 		y = Y;
 	}
 
+	unsigned long long Activated(){
+		return activated;
+	}
+
+	void Activate(unsigned long long tics){
+		activated = tics;
+		plays = true;
+	}
+
+	void Deactivate(){
+		activated = 0;
+		plays = false;	
+	}
+
 private:
 	int id{0}, x{0}, y{0};
 	unsigned char vel{64};
 	bool plays{false};
 	unsigned char pitch{60};
+	unsigned long long activated;
 	note_value gate{note_value::T4TH};
 	note_value value{note_value::T4TH};
 	

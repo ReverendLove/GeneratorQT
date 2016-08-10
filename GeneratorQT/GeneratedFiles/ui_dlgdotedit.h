@@ -173,7 +173,6 @@ public:
         QObject::connect(slVelocity, SIGNAL(valueChanged(int)), lblVelocityValue, SLOT(setNum(int)));
         QObject::connect(slVarianz, SIGNAL(valueChanged(int)), lblVarianzValue, SLOT(setNum(int)));
         QObject::connect(slVelocity, SIGNAL(valueChanged(int)), dlgDotEdit, SLOT(varianzMax(int)));
-        QObject::connect(cbValue, SIGNAL(currentIndexChanged(int)), dlgDotEdit, SLOT(gateMax(int)));
 
         QMetaObject::connectSlotsByName(dlgDotEdit);
     } // setupUi
