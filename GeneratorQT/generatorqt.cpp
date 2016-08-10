@@ -105,20 +105,20 @@ void GeneratorQT::editDot(){
 	int nActiveDot = ui.tblDots->item(t_row, 0)->text().toInt(); // In der ersten Spalte (0) steht die Id des ADots
 	auto di = std::find_if(dots.begin(), dots.end(), [&nActiveDot](ADot& a) -> bool{return a.Id() == nActiveDot; });
 	ADot& ad = *di;
-	dEdit.note_values(ADot::timeStrings);
-	dEdit.gate_values(ADot::timeStrings);
-	dEdit.notes(ADot::midiNotes);
+	dEdit.note_values(ADot::timeValueStrings());
+	dEdit.gate_values(ADot::timeValueStrings());
+	dEdit.notes(ADot::midiNoteStrings());
 	dEdit.note(ad.Pitch());
 	dEdit.velocity(ad.Vel());
-	dEdit.timeValue(ADot::valueMap[ad.Speed()]);
+	dEdit.timeValue(ADot::noteValueAsString(ad.Speed()));
 
 	if(dEdit.exec() == QDialog::Accepted){
 		ad.Pitch(dEdit.note());
-		ad.Speed(ADot::speedTable[dEdit.timeValue()]);
+		ad.Speed(ADot::noteValue(dEdit.timeValue()));
 		ad.Vel(dEdit.velocity());
 
 		//ui.tblDots->setItem(t_row, 0, new QTableWidgetItem(tr("%1").arg(ad.Id())));
-		ui.tblDots->setItem(t_row, 1, new QTableWidgetItem(tr("%1").arg(ADot::midiNotes[ad.Pitch()].c_str())));
+		ui.tblDots->setItem(t_row, 1, new QTableWidgetItem(tr("%1").arg(ADot::noteName(ad.Pitch()).c_str())));
 		ui.tblDots->setItem(t_row, 2, new QTableWidgetItem(tr(ad.SpeedStr().c_str())));
 		//ui.tblDots->setItem(t_row, 3, new QTableWidgetItem(tr(ad.LengthStr().c_str())));
 		ui.tblDots->setItem(t_row, 4, new QTableWidgetItem(tr("%1").arg(ad.Vel())));
@@ -127,7 +127,8 @@ void GeneratorQT::editDot(){
 
 void GeneratorQT::timerEvent(){
 	for(ADot& d : dots){
-		if(tickCounter % unsigned int(d.Speed()) == 0){
+		unsigned int nSpeed = d.Speed() == ADot::note_value::TNONE ? rand() % 48 + 8 : unsigned int(d.Speed());
+		if( tickCounter % nSpeed == 0){
 			int x = d.X();
 			int y = d.Y();
 			switch(d.Dir()){
@@ -317,7 +318,7 @@ void GeneratorQT::rollPos(ADot & d){
 			if(matrix[i % 8][j % 8] == 0){
 				d.X(i % 8);
 				d.Y(j % 8);		
-				d.Dir(d.Dir() + 1); // Im Uhrzeigersinn drehen
+				d.Dir(rand()%4); // Im Uhrzeigersinn drehen
 				matrix[i % 8][j % 8] = 1;
 				success = true;
 				break;
@@ -349,7 +350,7 @@ void GeneratorQT::fillDotsTable(){
 	ui.tblDots->clearContents();
 	for(ADot& d : dots){		
 		ui.tblDots->setItem(r, 0, new QTableWidgetItem(tr("%1").arg(d.Id())));
-		ui.tblDots->setItem(r, 1, new QTableWidgetItem(tr("%1").arg(ADot::midiNotes[d.Pitch()].c_str())));
+		ui.tblDots->setItem(r, 1, new QTableWidgetItem(tr("%1").arg(ADot::noteName(d.Pitch()).c_str())));
 		ui.tblDots->setItem(r, 2, new QTableWidgetItem(tr(d.SpeedStr().c_str())));
 		ui.tblDots->setItem(r, 3, new QTableWidgetItem(tr(d.LengthStr().c_str())));
 		ui.tblDots->setItem(r, 4, new QTableWidgetItem(tr("%1").arg(d.Vel())));

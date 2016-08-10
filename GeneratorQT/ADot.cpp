@@ -26,7 +26,7 @@ std::array<ADot::note_value, 27> ADot::speedTable{ADot::note_value::TNONE, ADot:
 													ADot::note_value::T12, ADot::note_value::T16, ADot::note_value::T32};
 
 std::vector<std::string> ADot::timeStrings{"Random", "1/32T", "1/32", "1/32*", "1/16T", "1/16", "1/16*", "1/8T", "1/8", "1/8*", "1/4T", "1/4", "1/4*", \
-											"1/2T", "1/2", "1/2*", "1/1", "1/2", "1/3", "1/4", "1/5", "1/6", "1/7", "1/8", "1/12", "1/16", "1/32"};
+											"1/2T", "1/2", "1/2*", "1/1", "2/1", "3/1", "4/1", "5/1", "6/1", "7/1", "8/1", "12/1", "16/1", "32/1"};
 
 std::map<ADot::note_value, std::string> ADot::valueMap{};
 std::map<std::string, ADot::note_value> ADot::valueAsStringMap{};
