@@ -44,6 +44,10 @@ public:
 		cbNote->setCurrentIndex(index);
 	}
 	
+	void gateIndex(int index){
+		cbGate->setCurrentIndex(index);
+	}
+
 	void velocity(int val){
 		slVelocity->setValue(val);
 	}
@@ -53,6 +57,12 @@ public:
 		cbValue->setCurrentIndex(cbValue->findText(qs));
 	}
 
+	void gateValue(std::string& s){
+		QString qs(s.c_str());
+		cbGate->setCurrentIndex(cbGate->findText(qs));
+	}
+
+
 	int note(){
 		return cbNote->currentIndex();
 	}
@@ -61,14 +71,25 @@ public:
 		return slVelocity->value();
 	}
 
-	int timeValue(){
+	int timeValueIndex(){
 		return cbValue->currentIndex();
+	}
+
+	int gateValueIndex(){
+		return   cbGate->currentIndex();
 	}
 
 public slots:
 	void varianzMax(int low){
 		slVarianz->setMaximum(127-low);
+
 	}
+
+	void gateMax(int max){
+		if(cbGate->currentIndex() > cbValue->currentIndex())
+			cbGate->setCurrentIndex(cbValue->currentIndex());
+	}
+
 private:
 	
 };

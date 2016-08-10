@@ -110,25 +110,30 @@ void GeneratorQT::editDot(){
 	dEdit.notes(ADot::midiNoteStrings());
 	dEdit.note(ad.Pitch());
 	dEdit.velocity(ad.Vel());
-	dEdit.timeValue(ADot::noteValueAsString(ad.Speed()));
-
+	dEdit.timeValue(ADot::noteValueAsString(ad.Value()));
+	dEdit.gateValue(ADot::noteValueAsString(ad.Gate()));
 	if(dEdit.exec() == QDialog::Accepted){
 		ad.Pitch(dEdit.note());
-		ad.Speed(ADot::noteValue(dEdit.timeValue()));
+		ad.Value(ADot::noteValue(dEdit.timeValueIndex()));
+		ad.Gate(ADot::noteValue(dEdit.gateValueIndex()));
 		ad.Vel(dEdit.velocity());
-
+		
 		//ui.tblDots->setItem(t_row, 0, new QTableWidgetItem(tr("%1").arg(ad.Id())));
 		ui.tblDots->setItem(t_row, 1, new QTableWidgetItem(tr("%1").arg(ADot::noteName(ad.Pitch()).c_str())));
-		ui.tblDots->setItem(t_row, 2, new QTableWidgetItem(tr(ad.SpeedStr().c_str())));
-		//ui.tblDots->setItem(t_row, 3, new QTableWidgetItem(tr(ad.LengthStr().c_str())));
+		ui.tblDots->setItem(t_row, 2, new QTableWidgetItem(tr(ad.ValueStr().c_str())));
+		ui.tblDots->setItem(t_row, 3, new QTableWidgetItem(tr(ad.GateStr().c_str())));
 		ui.tblDots->setItem(t_row, 4, new QTableWidgetItem(tr("%1").arg(ad.Vel())));
 	}	
 }
 
 void GeneratorQT::timerEvent(){
 	for(ADot& d : dots){
-		unsigned int nSpeed = d.Speed() == ADot::note_value::TNONE ? rand() % 48 + 8 : unsigned int(d.Speed());
-		if( tickCounter % nSpeed == 0){
+		unsigned int nValue = d.Value() == ADot::note_value::TNONE ? rand() % 48 + 8 : unsigned int(d.Value());
+		unsigned int nGate = d.Gate() == ADot::note_value::TNONE ? rand() % 48 + 8 : unsigned int(d.Gate());
+		if(tickCounter % nGate == 0 && d.Plays()){
+			noteOff(d);
+		}
+		if( tickCounter % nValue == 0){
 			int x = d.X();
 			int y = d.Y();
 			switch(d.Dir()){
@@ -283,8 +288,19 @@ void GeneratorQT::noteOn(ADot& d){
 	mgv.push_back('\x90');
 	mgv.push_back(d.Pitch());
 	mgv.push_back(d.Vel());
-
 	midiOut->sendMessage(&mgv);
+	d.Plays(true);
+}
+
+void GeneratorQT::noteOff(ADot & d){
+	if(!d.Plays())
+		return;
+	std::vector<unsigned char> mgv;
+
+	mgv.push_back('\x80');
+	mgv.push_back(d.Pitch());
+	midiOut->sendMessage(&mgv);
+	d.Plays(false);
 }
 
 void GeneratorQT::rollPos(ADot & d){
@@ -351,8 +367,8 @@ void GeneratorQT::fillDotsTable(){
 	for(ADot& d : dots){		
 		ui.tblDots->setItem(r, 0, new QTableWidgetItem(tr("%1").arg(d.Id())));
 		ui.tblDots->setItem(r, 1, new QTableWidgetItem(tr("%1").arg(ADot::noteName(d.Pitch()).c_str())));
-		ui.tblDots->setItem(r, 2, new QTableWidgetItem(tr(d.SpeedStr().c_str())));
-		ui.tblDots->setItem(r, 3, new QTableWidgetItem(tr(d.LengthStr().c_str())));
+		ui.tblDots->setItem(r, 2, new QTableWidgetItem(tr(d.ValueStr().c_str())));
+		ui.tblDots->setItem(r, 3, new QTableWidgetItem(tr(d.GateStr().c_str())));
 		ui.tblDots->setItem(r, 4, new QTableWidgetItem(tr("%1").arg(d.Vel())));
 		r++;
 	}	

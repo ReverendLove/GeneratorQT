@@ -58,6 +58,7 @@ private:
 	static void midiInCallback(double deltatime, std::vector<unsigned char>* message, void * userData);
 	void fillMatrix();
 	void noteOn(ADot& d);
+	void noteOff(ADot& d);
 	int isOccupied(int x, int y){ // Gibt an ob das Feld bereits von einem Stein besetzt ist
 		return matrix[x][y];
 	}

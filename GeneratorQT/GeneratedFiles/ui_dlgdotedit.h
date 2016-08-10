@@ -36,7 +36,6 @@ public:
     QHBoxLayout *horizontalLayout;
     QComboBox *cbNote;
     QLabel *lblNote;
-    QLabel *lblVelocity_2;
     QWidget *layoutWidget_2;
     QHBoxLayout *horizontalLayout_3;
     QLabel *lblVarianzValue;
@@ -90,12 +89,6 @@ public:
 
         horizontalLayout->addWidget(lblNote);
 
-        lblVelocity_2 = new QLabel(dlgDotEdit);
-        lblVelocity_2->setObjectName(QStringLiteral("lblVelocity_2"));
-        lblVelocity_2->setGeometry(QRect(399, 239, 47, 13));
-        QFont font;
-        font.setPointSize(10);
-        lblVelocity_2->setFont(font);
         layoutWidget_2 = new QWidget(dlgDotEdit);
         layoutWidget_2->setObjectName(QStringLiteral("layoutWidget_2"));
         layoutWidget_2->setGeometry(QRect(220, 10, 67, 211));
@@ -147,6 +140,8 @@ public:
         horizontalLayout_4->setContentsMargins(0, 0, 0, 0);
         lblVelocity = new QLabel(layoutWidget2);
         lblVelocity->setObjectName(QStringLiteral("lblVelocity"));
+        QFont font;
+        font.setPointSize(10);
         lblVelocity->setFont(font);
 
         horizontalLayout_4->addWidget(lblVelocity);
@@ -165,7 +160,6 @@ public:
         lblGate->raise();
         layoutWidget->raise();
         layoutWidget->raise();
-        lblVelocity_2->raise();
         layoutWidget_2->raise();
 #ifndef QT_NO_SHORTCUT
         lblValue->setBuddy(cbValue);
@@ -179,6 +173,7 @@ public:
         QObject::connect(slVelocity, SIGNAL(valueChanged(int)), lblVelocityValue, SLOT(setNum(int)));
         QObject::connect(slVarianz, SIGNAL(valueChanged(int)), lblVarianzValue, SLOT(setNum(int)));
         QObject::connect(slVelocity, SIGNAL(valueChanged(int)), dlgDotEdit, SLOT(varianzMax(int)));
+        QObject::connect(cbValue, SIGNAL(currentIndexChanged(int)), dlgDotEdit, SLOT(gateMax(int)));
 
         QMetaObject::connectSlotsByName(dlgDotEdit);
     } // setupUi
@@ -189,7 +184,6 @@ public:
         lblValue->setText(QApplication::translate("dlgDotEdit", "Value", 0));
         lblGate->setText(QApplication::translate("dlgDotEdit", "Gate", 0));
         lblNote->setText(QApplication::translate("dlgDotEdit", "Note", 0));
-        lblVelocity_2->setText(QApplication::translate("dlgDotEdit", "Velocity", 0));
         lblVarianzValue->setText(QApplication::translate("dlgDotEdit", "Varianz", 0));
         lblVelocityValue->setText(QApplication::translate("dlgDotEdit", "Velocity", 0));
         lblVelocity->setText(QApplication::translate("dlgDotEdit", "Velocity", 0));

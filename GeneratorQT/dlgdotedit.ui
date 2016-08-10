@@ -106,24 +106,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QLabel" name="lblVelocity_2">
-   <property name="geometry">
-    <rect>
-     <x>399</x>
-     <y>239</y>
-     <width>47</width>
-     <height>13</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>Velocity</string>
-   </property>
-  </widget>
   <widget class="QWidget" name="layoutWidget_2">
    <property name="geometry">
     <rect>
@@ -229,7 +211,6 @@
   <zorder>lblGate</zorder>
   <zorder>layoutWidget</zorder>
   <zorder>layoutWidget</zorder>
-  <zorder>lblVelocity_2</zorder>
   <zorder>layoutWidget_2</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
@@ -315,8 +296,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>cbValue</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>dlgDotEdit</receiver>
+   <slot>gateMax(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>51</x>
+     <y>64</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>116</x>
+     <y>79</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>varianzMax(int)</slot>
+  <slot>gateMax(int)</slot>
  </slots>
 </ui>

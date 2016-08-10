@@ -44,19 +44,19 @@ public:
 	unsigned char Pitch(){
 		return pitch;
 	}
-	note_value Speed() const{ // In Ticks angegeben	
+	note_value Value() const{ // In Ticks angegeben	
 		return value;
 	}
 
-	std::string SpeedStr() const{
+	std::string ValueStr() const{
 		return valueMap[value];
 	}
 
-	note_value Length() const{
-		return length;
+	note_value Gate() const{
+		return gate;
 	}
-	std::string LengthStr() const{
-		return valueMap[length];
+	std::string GateStr() const{
+		return valueMap[gate];
 	}
 	int X() const{
 		return x;
@@ -77,26 +77,35 @@ public:
 	void Pitch(int p){
 		pitch = p;
 	}
-	void Speed(note_value sp){
+	void Value(note_value sp){
 		value = sp;
 	}
-	void Length(note_value l){
-		length = l;
+	void Gate(note_value l){
+		gate = l;
 	}
+	bool Plays(){
+		return plays;
+	}
+	void Plays(bool p){
+		plays = p;
+	}
+
 	void X(int X){
 		x = X;
 	}
+
 	void Y(int Y){
 		y = Y;
 	}
+
 private:
 	int id{0}, x{0}, y{0};
 	unsigned char vel{64};
+	bool plays{false};
 	unsigned char pitch{60};
-	note_value length{note_value::T4TH};
+	note_value gate{note_value::T4TH};
 	note_value value{note_value::T4TH};
-	//////////////////////DON'T FORGET/////////////////////////////////
-	// Deklarationsreihenfolge bestimmt die Initialisierungreihenfolge!
+	
 public:
 	static int indexOfNoteValue(note_value n){
 		int i;
@@ -126,6 +135,8 @@ public:
 		return midiNotes;
 	}
 private:
+	//////////////////////DON'T FORGET/////////////////////////////////
+	// Deklarationsreihenfolge bestimmt die Initialisierungreihenfolge!
 	static std::vector<std::string> timeStrings;
 	static std::array<double, 27> relSpeed;
 	static std::array<note_value, 27> speedTable;
