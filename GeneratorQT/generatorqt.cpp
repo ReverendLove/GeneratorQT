@@ -62,7 +62,6 @@ GeneratorQT::GeneratorQT(QWidget *parent)
 	ui.cbMidiOut->addItems(midiOutPorts);
 	fillDotsTable();
 	QueryPerformanceFrequency(&frequency);
-
 }
 
 GeneratorQT::~GeneratorQT(){
@@ -128,7 +127,6 @@ void GeneratorQT::editDot(){
 		ad.Gate(ADot::noteValue(dEdit.gateValueIndex()));
 		ad.Vel(dEdit.velocity());
 		
-		//ui.tblDots->setItem(t_row, 0, new QTableWidgetItem(tr("%1").arg(ad.Id())));
 		ui.tblDots->setItem(t_row, 1, new QTableWidgetItem(tr("%1").arg(ADot::noteName(ad.Pitch()).c_str())));
 		ui.tblDots->setItem(t_row, 2, new QTableWidgetItem(tr(ad.ValueStr().c_str())));
 		ui.tblDots->setItem(t_row, 3, new QTableWidgetItem(tr(ad.GateStr().c_str())));
@@ -140,10 +138,12 @@ void GeneratorQT::startStop(bool btnState){
 	if(btnState == true){
 		timer->start(gSpeed);
 		ui.btnStart->setText("Stop!");
+		runState = true;
 	}
 	else{
 		timer->stop();
 		ui.btnStart->setText("Start!");
+		runState = false;
 	}
 
 }
@@ -159,22 +159,22 @@ void GeneratorQT::midiOutChanged(int mi){
 }
 
 void GeneratorQT::externalSync(bool b){
+	b = ui.cbSync->checkState();
 	if(b){
-		midiIn->closePort();
-		midiIn->openPort(ui.cbMidiIn->currentIndex());
+		if(!midiIn->isPortOpen())
+			midiIn->openPort(ui.cbMidiIn->currentIndex());
 		midiIn->setCallback(&midiInCallback);
 		midiIn->ignoreTypes(true, false, false);
 	}
 	else{
-		midiIn->setCallback(nullptr);
-		midiIn->closePort();
-		midiIn->openPort(ui.cbMidiIn->currentIndex());
+		midiIn->cancelCallback();
 	}
-
 }
 
 
 void GeneratorQT::timerEvent(){
+	if(!runState)
+		return;
 	for(ADot& d : dots){
 		unsigned int nValue = d.Value() == ADot::note_value::TNONE ? rand() % 48 + 8 : unsigned int(d.Value());
 		unsigned int nGate = d.Gate() == ADot::note_value::TNONE ? rand() % 48 + 8 : unsigned int(d.Gate());
@@ -292,8 +292,6 @@ void GeneratorQT::paintEvent(QPaintEvent *event){
 		sId.setNum(ad.Id());
 		p.drawText(pt, sId);
 	}
-	
-	//ui.lblSpeed->setText(tr("%1").arg(gSpeed));
 	ui.slSpeed->setValue(round(2500/gSpeed));
 }
 
@@ -423,7 +421,3 @@ void GeneratorQT::fillDotsTable(){
 		r++;
 	}	
 }
-
-
-
-

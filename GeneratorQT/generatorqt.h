@@ -44,10 +44,10 @@ private:
 	static unsigned tickCounter;
 	static unsigned long long gSpeed; // Global Speed in BPM
 	static unsigned long long callBackCounter;
-	static LARGE_INTEGER start, 
-						end, 
-						elapsedMicroseconds,
-						frequency;
+	static LARGE_INTEGER	start, 
+							end, 
+							elapsedMicroseconds,
+							frequency;
 
 	std::array<std::array<int, 8>, 8> matrix{};
 	std::vector<ADot> dots{};
@@ -62,7 +62,6 @@ private:
 
 
 	void paintEvent(QPaintEvent *event);
-
 	static void midiInCallback(double deltatime, std::vector<unsigned char>* message, void * userData);
 	void fillMatrix();
 	void noteOn(ADot& d);
@@ -72,9 +71,6 @@ private:
 	}
 	void rollPos(ADot& d);
 	void pushDot(ADot&d, bool randomly = false);
-
 	void fillDotsTable();
-
 };
-
 #endif // GENERATORQT_H
