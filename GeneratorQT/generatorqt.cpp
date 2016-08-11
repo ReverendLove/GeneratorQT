@@ -5,8 +5,13 @@
 
 
 unsigned GeneratorQT::tickCounter{0};
-long GeneratorQT::gSpeed{0}; // Global Speed in BPM
-std::chrono::time_point<std::chrono::system_clock>  GeneratorQT::start = std::chrono::system_clock::now();
+unsigned long long GeneratorQT::gSpeed{21}; // Global Speed in BPM
+unsigned long long GeneratorQT::callBackCounter{0};
+LARGE_INTEGER GeneratorQT::start,
+				GeneratorQT::end,
+				GeneratorQT::elapsedMicroseconds,
+				GeneratorQT::frequency;
+
 
 GeneratorQT::GeneratorQT(QWidget *parent)
 	: QMainWindow(parent)
@@ -36,25 +41,28 @@ GeneratorQT::GeneratorQT(QWidget *parent)
 
 	int nInPorts = midiIn->getPortCount();
 	for(int i = 0; i < nInPorts; i++){
-		midiInPorts.push_back(midiIn->getPortName(i));
+		midiInPorts.push_back(midiIn->getPortName(i).c_str());
 	}
-		midiIn->openPort(0);
-
+	midiIn->openPort(0);
+	
 	int nOutPorts = midiOut->getPortCount();
 	for(int i = 0; i < nOutPorts; i++){
-		midiOutPorts.push_back(midiOut->getPortName(i));
+		midiOutPorts.push_back(midiOut->getPortName(i).c_str());
 	}
 	midiOut->openPort(0);
 	
 	timer = new QTimer(this);
 	connect(timer, &QTimer::timeout, this, &GeneratorQT::timerEvent);
 	timer->setTimerType(Qt::PreciseTimer);
-	timer->start(bpm_to_msec_per_tic(120));
+	
 	// Qt-User-Interface wird initialisiert
 	ui.setupUi(this);
 	ui.sbNumberOfDots->setValue(2);
-	ui.slSpeed->setValue(120);
+	ui.cbMidiIn->addItems(midiInPorts);
+	ui.cbMidiOut->addItems(midiOutPorts);
 	fillDotsTable();
+	QueryPerformanceFrequency(&frequency);
+
 }
 
 GeneratorQT::~GeneratorQT(){
@@ -94,8 +102,10 @@ void GeneratorQT::dotsNumChanged(){
 }
 
 void GeneratorQT::slSpeedChanged(int b){
-	if(timer!=nullptr)
+	if(timer != nullptr){
 		timer->start(bpm_to_msec_per_tic(b));
+		gSpeed = bpm_to_msec_per_tic(b);
+	}
 }
 
 void GeneratorQT::editDot(){
@@ -125,6 +135,44 @@ void GeneratorQT::editDot(){
 		ui.tblDots->setItem(t_row, 4, new QTableWidgetItem(tr("%1").arg(ad.Vel())));
 	}	
 }
+
+void GeneratorQT::startStop(bool btnState){
+	if(btnState == true){
+		timer->start(gSpeed);
+		ui.btnStart->setText("Stop!");
+	}
+	else{
+		timer->stop();
+		ui.btnStart->setText("Start!");
+	}
+
+}
+
+void GeneratorQT::midiInChanged(int mi){
+	midiIn->closePort();
+	midiIn->openPort(mi);
+}
+
+void GeneratorQT::midiOutChanged(int mi){
+	midiOut->closePort();
+	midiOut->openPort(mi);
+}
+
+void GeneratorQT::externalSync(bool b){
+	if(b){
+		midiIn->closePort();
+		midiIn->openPort(ui.cbMidiIn->currentIndex());
+		midiIn->setCallback(&midiInCallback);
+		midiIn->ignoreTypes(true, false, false);
+	}
+	else{
+		midiIn->setCallback(nullptr);
+		midiIn->closePort();
+		midiIn->openPort(ui.cbMidiIn->currentIndex());
+	}
+
+}
+
 
 void GeneratorQT::timerEvent(){
 	for(ADot& d : dots){
@@ -244,23 +292,28 @@ void GeneratorQT::paintEvent(QPaintEvent *event){
 		sId.setNum(ad.Id());
 		p.drawText(pt, sId);
 	}
+	
+	//ui.lblSpeed->setText(tr("%1").arg(gSpeed));
+	ui.slSpeed->setValue(round(2500/gSpeed));
 }
 
 void GeneratorQT::midiInCallback(double deltatime, std::vector<unsigned char>* message, void * userData){
-	std::chrono::nanoseconds delta;
-	unsigned long nCounter{};
-	// Hier wird bei jedem MidiInEvent etwas gemacht.
 	if(message->size() > 0){
 		switch((*message)[0]){
 		case 248:
-			if(nCounter == 0){
-				start = std::chrono::system_clock::now();
+			if(callBackCounter == 0){
+				QueryPerformanceCounter(&start);
 			}
-			if(nCounter % 24 == 0){ //Durchschnitt für 24 Ticks berechnen
-				delta = std::chrono::system_clock::now() - start;
-				gSpeed = round(delta.count() / (1000000 * 24)); // msec für einen Tick in static-Variablen gSpeed ablegen
+			else{
+				if(callBackCounter % 24 == 0){ //Durchschnitt für 24 Ticks berechnen
+					QueryPerformanceCounter(&end);
+					elapsedMicroseconds.QuadPart = end.QuadPart - start.QuadPart;
+					double delta = (elapsedMicroseconds.QuadPart * 1000000) / frequency.QuadPart;
+					gSpeed = delta / 1000 / 24; // msec für einen Tick in static-Variablen gSpeed ablegen	
+					QueryPerformanceCounter(&start);
+				}
 			}
-			nCounter++;
+			callBackCounter++;
 			break;
 		case 144:	// Note On / Achtung! Kanalnummer berücksichtigen.
 		case 128:	// Note Off / Achtung! Kanalnummer berücksichtigen.
@@ -370,3 +423,7 @@ void GeneratorQT::fillDotsTable(){
 		r++;
 	}	
 }
+
+
+
+

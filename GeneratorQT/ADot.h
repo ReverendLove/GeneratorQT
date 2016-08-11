@@ -117,7 +117,7 @@ private:
 	unsigned char vel{64};
 	bool plays{false};
 	unsigned char pitch{60};
-	unsigned long long activated;
+	unsigned long long activated{0};
 	note_value gate{note_value::T4TH};
 	note_value value{note_value::T4TH};
 	

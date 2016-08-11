@@ -1,6 +1,6 @@
 #ifndef GENERATORQT_H
 #define GENERATORQT_H
-
+#include <windows.h>
 #include <QtWidgets/QMainWindow>
 #include "ui_generatorqt.h"
 #include "ADot.h"
@@ -30,6 +30,10 @@ public slots:
 	void dotsNumChanged();
 	void slSpeedChanged(int);
 	void editDot();
+	void startStop(bool);
+	void midiInChanged(int);
+	void midiOutChanged(int);
+	void externalSync(bool);
 
 
 private:
@@ -38,12 +42,18 @@ private:
 	
 	bool runState{false};
 	static unsigned tickCounter;
-	static long gSpeed; // Global Speed in BPM
+	static unsigned long long gSpeed; // Global Speed in BPM
+	static unsigned long long callBackCounter;
+	static LARGE_INTEGER start, 
+						end, 
+						elapsedMicroseconds,
+						frequency;
+
 	std::array<std::array<int, 8>, 8> matrix{};
 	std::vector<ADot> dots{};
 
-	std::vector<std::string> midiInPorts{};
-	std::vector<std::string> midiOutPorts{};
+	QStringList midiInPorts{};
+	QStringList midiOutPorts{};
 	
 	QRect board;
 	RtMidiOut* midiOut{nullptr};
@@ -51,8 +61,6 @@ private:
 	QTimer *timer{nullptr};
 
 
-	static std::chrono::time_point<std::chrono::system_clock>  start;
-	
 	void paintEvent(QPaintEvent *event);
 
 	static void midiInCallback(double deltatime, std::vector<unsigned char>* message, void * userData);

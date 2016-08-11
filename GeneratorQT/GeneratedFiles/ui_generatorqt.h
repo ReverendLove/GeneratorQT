@@ -13,12 +13,16 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QFormLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QTableWidget>
@@ -38,6 +42,16 @@ public:
     QLabel *label;
     QLabel *lblSpeed;
     QTableWidget *tblDots;
+    QPushButton *btnStart;
+    QWidget *layoutWidget1;
+    QHBoxLayout *loMidiIn;
+    QLabel *lblMidiIn;
+    QComboBox *cbMidiIn;
+    QCheckBox *cbSync;
+    QWidget *layoutWidget2;
+    QHBoxLayout *horizontalLayout;
+    QLabel *lblMidiOut;
+    QComboBox *cbMidiOut;
     QMenuBar *menuBar;
     QMenu *menu_Regeln;
     QToolBar *mainToolBar;
@@ -130,7 +144,82 @@ public:
         tblDots->verticalHeader()->setVisible(false);
         tblDots->verticalHeader()->setDefaultSectionSize(16);
         tblDots->verticalHeader()->setMinimumSectionSize(12);
+        btnStart = new QPushButton(wdgCentral);
+        btnStart->setObjectName(QStringLiteral("btnStart"));
+        btnStart->setGeometry(QRect(650, 480, 91, 31));
+        QPalette palette;
+        QBrush brush(QColor(255, 0, 0, 255));
+        brush.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Active, QPalette::Button, brush);
+        QBrush brush1(QColor(0, 255, 0, 255));
+        brush1.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Inactive, QPalette::Button, brush1);
+        QBrush brush2(QColor(214, 255, 207, 255));
+        brush2.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Disabled, QPalette::Button, brush2);
+        btnStart->setPalette(palette);
+        QFont font;
+        font.setPointSize(11);
+        font.setBold(true);
+        font.setWeight(75);
+        btnStart->setFont(font);
+        btnStart->setAutoFillBackground(false);
+        btnStart->setCheckable(true);
+        btnStart->setChecked(false);
+        layoutWidget1 = new QWidget(wdgCentral);
+        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(10, 460, 501, 22));
+        loMidiIn = new QHBoxLayout(layoutWidget1);
+        loMidiIn->setSpacing(5);
+        loMidiIn->setContentsMargins(11, 11, 11, 11);
+        loMidiIn->setObjectName(QStringLiteral("loMidiIn"));
+        loMidiIn->setContentsMargins(0, 0, 0, 0);
+        lblMidiIn = new QLabel(layoutWidget1);
+        lblMidiIn->setObjectName(QStringLiteral("lblMidiIn"));
+
+        loMidiIn->addWidget(lblMidiIn);
+
+        cbMidiIn = new QComboBox(layoutWidget1);
+        cbMidiIn->setObjectName(QStringLiteral("cbMidiIn"));
+
+        loMidiIn->addWidget(cbMidiIn);
+
+        cbSync = new QCheckBox(layoutWidget1);
+        cbSync->setObjectName(QStringLiteral("cbSync"));
+
+        loMidiIn->addWidget(cbSync);
+
+        loMidiIn->setStretch(0, 1);
+        loMidiIn->setStretch(1, 4);
+        layoutWidget2 = new QWidget(wdgCentral);
+        layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
+        layoutWidget2->setGeometry(QRect(10, 500, 411, 22));
+        horizontalLayout = new QHBoxLayout(layoutWidget2);
+        horizontalLayout->setSpacing(5);
+        horizontalLayout->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        horizontalLayout->setContentsMargins(0, 0, 0, 0);
+        lblMidiOut = new QLabel(layoutWidget2);
+        lblMidiOut->setObjectName(QStringLiteral("lblMidiOut"));
+
+        horizontalLayout->addWidget(lblMidiOut);
+
+        cbMidiOut = new QComboBox(layoutWidget2);
+        cbMidiOut->setObjectName(QStringLiteral("cbMidiOut"));
+
+        horizontalLayout->addWidget(cbMidiOut);
+
+        horizontalLayout->setStretch(0, 1);
+        horizontalLayout->setStretch(1, 4);
         GeneratorQTClass->setCentralWidget(wdgCentral);
+        sbNumberOfDots->raise();
+        slSpeed->raise();
+        layoutWidget->raise();
+        tblDots->raise();
+        btnStart->raise();
+        layoutWidget->raise();
+        layoutWidget->raise();
+        cbSync->raise();
         menuBar = new QMenuBar(GeneratorQTClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 953, 21));
@@ -153,6 +242,10 @@ public:
         QObject::connect(slSpeed, SIGNAL(valueChanged(int)), GeneratorQTClass, SLOT(slSpeedChanged(int)));
         QObject::connect(slSpeed, SIGNAL(valueChanged(int)), lblSpeed, SLOT(setNum(int)));
         QObject::connect(tblDots, SIGNAL(doubleClicked(QModelIndex)), GeneratorQTClass, SLOT(editDot()));
+        QObject::connect(btnStart, SIGNAL(toggled(bool)), GeneratorQTClass, SLOT(startStop(bool)));
+        QObject::connect(cbMidiIn, SIGNAL(currentIndexChanged(int)), GeneratorQTClass, SLOT(midiInChanged(int)));
+        QObject::connect(cbMidiOut, SIGNAL(currentIndexChanged(int)), GeneratorQTClass, SLOT(midiOutChanged(int)));
+        QObject::connect(cbSync, SIGNAL(toggled(bool)), GeneratorQTClass, SLOT(externalSync(bool)));
 
         QMetaObject::connectSlotsByName(GeneratorQTClass);
     } // setupUi
@@ -172,6 +265,10 @@ public:
         ___qtablewidgetitem3->setText(QApplication::translate("GeneratorQTClass", "Gate", 0));
         QTableWidgetItem *___qtablewidgetitem4 = tblDots->horizontalHeaderItem(4);
         ___qtablewidgetitem4->setText(QApplication::translate("GeneratorQTClass", "Vel", 0));
+        btnStart->setText(QApplication::translate("GeneratorQTClass", "Start!", 0));
+        lblMidiIn->setText(QApplication::translate("GeneratorQTClass", "Midi In", 0));
+        cbSync->setText(QApplication::translate("GeneratorQTClass", "Ext. Sync", 0));
+        lblMidiOut->setText(QApplication::translate("GeneratorQTClass", "Midi Out", 0));
         menu_Regeln->setTitle(QApplication::translate("GeneratorQTClass", "&Regeln", 0));
     } // retranslateUi
 
