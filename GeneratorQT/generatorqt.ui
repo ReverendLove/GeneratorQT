@@ -104,7 +104,7 @@
      <rect>
       <x>510</x>
       <y>10</y>
-      <width>245</width>
+      <width>291</width>
       <height>400</height>
      </rect>
     </property>
@@ -151,7 +151,7 @@
      <number>32</number>
     </property>
     <property name="columnCount">
-     <number>5</number>
+     <number>7</number>
     </property>
     <attribute name="horizontalHeaderCascadingSectionResizes">
      <bool>false</bool>
@@ -231,6 +231,12 @@
       <string>Vel</string>
      </property>
     </column>
+    <column>
+     <property name="text">
+      <string>Varianz</string>
+     </property>
+    </column>
+    <column/>
    </widget>
    <widget class="QPushButton" name="btnStart">
     <property name="geometry">
@@ -355,14 +361,6 @@
      </item>
     </layout>
    </widget>
-   <zorder>sbNumberOfDots</zorder>
-   <zorder>slSpeed</zorder>
-   <zorder>layoutWidget</zorder>
-   <zorder>tblDots</zorder>
-   <zorder>btnStart</zorder>
-   <zorder>layoutWidget</zorder>
-   <zorder>layoutWidget</zorder>
-   <zorder>cbSync</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

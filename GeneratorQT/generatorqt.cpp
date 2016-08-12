@@ -111,6 +111,8 @@ void GeneratorQT::editDot(){
 	dlgDotEdit dEdit(this);
 	
 	int t_row = ui.tblDots->currentRow();
+	if(t_row >= dots.size()) 
+		return;
 	int nActiveDot = ui.tblDots->item(t_row, 0)->text().toInt(); // In der ersten Spalte (0) steht die Id des ADots
 	auto di = std::find_if(dots.begin(), dots.end(), [&nActiveDot](ADot& a) -> bool{return a.Id() == nActiveDot; });
 	ADot& ad = *di;
@@ -119,18 +121,22 @@ void GeneratorQT::editDot(){
 	dEdit.notes(ADot::midiNoteStrings());
 	dEdit.note(ad.Pitch());
 	dEdit.velocity(ad.Vel());
+	dEdit.velVariance(ad.VelVariance());
 	dEdit.timeValue(ADot::noteValueAsString(ad.Value()));
 	dEdit.gateValue(ADot::noteValueAsString(ad.Gate()));
+	dEdit.Id(ad.Id());
 	if(dEdit.exec() == QDialog::Accepted){
 		ad.Pitch(dEdit.note());
 		ad.Value(ADot::noteValue(dEdit.timeValueIndex()));
 		ad.Gate(ADot::noteValue(dEdit.gateValueIndex()));
 		ad.Vel(dEdit.velocity());
+		ad.VelVariance(dEdit.velVariance());
 		
 		ui.tblDots->setItem(t_row, 1, new QTableWidgetItem(tr("%1").arg(ADot::noteName(ad.Pitch()).c_str())));
 		ui.tblDots->setItem(t_row, 2, new QTableWidgetItem(tr(ad.ValueStr().c_str())));
 		ui.tblDots->setItem(t_row, 3, new QTableWidgetItem(tr(ad.GateStr().c_str())));
 		ui.tblDots->setItem(t_row, 4, new QTableWidgetItem(tr("%1").arg(ad.Vel())));
+		ui.tblDots->setItem(t_row, 5, new QTableWidgetItem(tr("%1").arg(ad.VelVariance())));
 	}	
 }
 
@@ -337,7 +343,7 @@ void GeneratorQT::noteOn(ADot& d){
 
 	mgv.push_back('\x90');
 	mgv.push_back(d.Pitch());
-	mgv.push_back(d.Vel());
+	mgv.push_back(d.Vel() + rand() % (d.VelVariance() == 0 ? 1 : d.VelVariance()));
 	midiOut->sendMessage(&mgv);
 	d.Activate(tickCounter);
 }
@@ -405,6 +411,7 @@ void GeneratorQT::pushDot(ADot & d, bool randomly){
 		d.Dir(rand() % 4);
 		d.Pitch(32 + rand() % 50);
 		d.Vel((27 + rand() % 100));
+		d.VelVariance(127 - d.Vel());
 	}
 	dots.push_back(d);	
 }
@@ -418,6 +425,7 @@ void GeneratorQT::fillDotsTable(){
 		ui.tblDots->setItem(r, 2, new QTableWidgetItem(tr(d.ValueStr().c_str())));
 		ui.tblDots->setItem(r, 3, new QTableWidgetItem(tr(d.GateStr().c_str())));
 		ui.tblDots->setItem(r, 4, new QTableWidgetItem(tr("%1").arg(d.Vel())));
+		ui.tblDots->setItem(r, 5, new QTableWidgetItem(tr("%1").arg(d.VelVariance())));
 		r++;
 	}	
 }

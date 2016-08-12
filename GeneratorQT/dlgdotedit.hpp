@@ -52,6 +52,9 @@ public:
 		slVelocity->setValue(val);
 	}
 
+	void velVariance(int val){
+		slVarianz->setValue(val);
+	}
 	void timeValue(std::string& s){
 		QString qs(s.c_str());
 		cbValue->setCurrentIndex(cbValue->findText(qs));
@@ -71,6 +74,10 @@ public:
 		return slVelocity->value();
 	}
 
+	int velVariance(){
+		return slVarianz->value();
+	}
+
 	int timeValueIndex(){
 		return cbValue->currentIndex();
 	}
@@ -79,6 +86,9 @@ public:
 		return   cbGate->currentIndex();
 	}
 
+	void Id(int id){
+		lblDotId->setText(QString().number(id));
+	}
 public slots:
 	void varianzMax(int low){
 		slVarianz->setMaximum(127-low);

@@ -48,6 +48,7 @@ public:
     QHBoxLayout *horizontalLayout_4;
     QLabel *lblVelocity;
     QLabel *lblVarianz;
+    QLabel *lblDotId;
 
     void setupUi(QDialog *dlgDotEdit)
     {
@@ -152,6 +153,18 @@ public:
 
         horizontalLayout_4->addWidget(lblVarianz);
 
+        lblDotId = new QLabel(dlgDotEdit);
+        lblDotId->setObjectName(QStringLiteral("lblDotId"));
+        lblDotId->setGeometry(QRect(20, 150, 47, 41));
+        QFont font1;
+        font1.setPointSize(16);
+        font1.setBold(true);
+        font1.setWeight(75);
+        lblDotId->setFont(font1);
+        lblDotId->setFrameShape(QFrame::StyledPanel);
+        lblDotId->setFrameShadow(QFrame::Sunken);
+        lblDotId->setLineWidth(4);
+        lblDotId->setAlignment(Qt::AlignCenter);
         layoutWidget->raise();
         buttonBox->raise();
         cbValue->raise();
@@ -161,6 +174,7 @@ public:
         layoutWidget->raise();
         layoutWidget->raise();
         layoutWidget_2->raise();
+        lblDotId->raise();
 #ifndef QT_NO_SHORTCUT
         lblValue->setBuddy(cbValue);
         lblGate->setBuddy(cbGate);
@@ -187,6 +201,7 @@ public:
         lblVelocityValue->setText(QApplication::translate("dlgDotEdit", "Velocity", 0));
         lblVelocity->setText(QApplication::translate("dlgDotEdit", "Velocity", 0));
         lblVarianz->setText(QApplication::translate("dlgDotEdit", "Varianz", 0));
+        lblDotId->setText(QApplication::translate("dlgDotEdit", "0", 0));
     } // retranslateUi
 
 };

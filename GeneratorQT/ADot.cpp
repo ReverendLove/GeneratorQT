@@ -33,6 +33,11 @@ int ADot::lastId{0};
 
 bool ADot::staticInit = ADot::initSpeedMap();
 
+int ADot::Counter(){
+	return counter;
+}
+
+
 bool ADot::initSpeedMap(){
 	try{
 		for(int i = 0; i < timeStrings.size() && i < speedTable.size(); i++){

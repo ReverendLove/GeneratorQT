@@ -103,8 +103,8 @@ public:
         formLayout->setWidget(0, QFormLayout::FieldRole, lblSpeed);
 
         tblDots = new QTableWidget(wdgCentral);
-        if (tblDots->columnCount() < 5)
-            tblDots->setColumnCount(5);
+        if (tblDots->columnCount() < 7)
+            tblDots->setColumnCount(7);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         tblDots->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
@@ -115,10 +115,12 @@ public:
         tblDots->setHorizontalHeaderItem(3, __qtablewidgetitem3);
         QTableWidgetItem *__qtablewidgetitem4 = new QTableWidgetItem();
         tblDots->setHorizontalHeaderItem(4, __qtablewidgetitem4);
+        QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
+        tblDots->setHorizontalHeaderItem(5, __qtablewidgetitem5);
         if (tblDots->rowCount() < 32)
             tblDots->setRowCount(32);
         tblDots->setObjectName(QStringLiteral("tblDots"));
-        tblDots->setGeometry(QRect(510, 10, 245, 400));
+        tblDots->setGeometry(QRect(510, 10, 291, 400));
         QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Expanding);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
@@ -136,7 +138,7 @@ public:
         tblDots->setWordWrap(false);
         tblDots->setCornerButtonEnabled(false);
         tblDots->setRowCount(32);
-        tblDots->setColumnCount(5);
+        tblDots->setColumnCount(7);
         tblDots->horizontalHeader()->setCascadingSectionResizes(false);
         tblDots->horizontalHeader()->setDefaultSectionSize(45);
         tblDots->horizontalHeader()->setHighlightSections(true);
@@ -212,14 +214,6 @@ public:
         horizontalLayout->setStretch(0, 1);
         horizontalLayout->setStretch(1, 4);
         GeneratorQTClass->setCentralWidget(wdgCentral);
-        sbNumberOfDots->raise();
-        slSpeed->raise();
-        layoutWidget->raise();
-        tblDots->raise();
-        btnStart->raise();
-        layoutWidget->raise();
-        layoutWidget->raise();
-        cbSync->raise();
         menuBar = new QMenuBar(GeneratorQTClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 953, 21));
@@ -265,6 +259,8 @@ public:
         ___qtablewidgetitem3->setText(QApplication::translate("GeneratorQTClass", "Gate", 0));
         QTableWidgetItem *___qtablewidgetitem4 = tblDots->horizontalHeaderItem(4);
         ___qtablewidgetitem4->setText(QApplication::translate("GeneratorQTClass", "Vel", 0));
+        QTableWidgetItem *___qtablewidgetitem5 = tblDots->horizontalHeaderItem(5);
+        ___qtablewidgetitem5->setText(QApplication::translate("GeneratorQTClass", "Varianz", 0));
         btnStart->setText(QApplication::translate("GeneratorQTClass", "Start!", 0));
         lblMidiIn->setText(QApplication::translate("GeneratorQTClass", "Midi In", 0));
         cbSync->setText(QApplication::translate("GeneratorQTClass", "Ext. Sync", 0));

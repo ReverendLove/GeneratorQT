@@ -203,6 +203,38 @@
     </item>
    </layout>
   </widget>
+  <widget class="QLabel" name="lblDotId">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>150</y>
+     <width>47</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Sunken</enum>
+   </property>
+   <property name="lineWidth">
+    <number>4</number>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
   <zorder>layoutWidget</zorder>
   <zorder>buttonBox</zorder>
   <zorder>cbValue</zorder>
@@ -212,6 +244,7 @@
   <zorder>layoutWidget</zorder>
   <zorder>layoutWidget</zorder>
   <zorder>layoutWidget_2</zorder>
+  <zorder>lblDotId</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

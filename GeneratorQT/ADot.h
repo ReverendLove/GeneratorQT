@@ -70,15 +70,22 @@ public:
 	unsigned char Vel() const{
 		return vel;
 	}
+	unsigned char VelVariance() const{
+		return velVariance;
+	}
 	void Dir(int d) // mit ++increment wird im Uhrzeigersinn gedreht
 	{				// es gibt nur vier Richtungen UP, DOWN, LEFT, RIGHT
 		dir = (direction)(d % 4);
 	}
-	void Vel(int v){
-		vel = v;
+	void Vel(unsigned char  v){
+		vel = v > 127 ? 64 : v;
+		velVariance  = velVariance + vel > 127 ? 127 - vel : velVariance;
 	}
-	void Pitch(int p){
-		pitch = p;
+	void VelVariance(unsigned char  v){
+		velVariance  = v + vel > 127 ? 127 - vel : v;
+	}
+	void Pitch(unsigned char  p){
+		pitch = p > 127 ? 81 : p;
 	}
 	void Tune(double& t){	// tune gibt das Verhältnis zum Viertelton t/1 an
 		tune = t <= -1 || t >= 1 ? 0 : t;
@@ -118,10 +125,12 @@ public:
 		plays = false;	
 	}
 
+	static int Counter();
+
 private:
 	int id{0}, x{0}, y{0};
 	unsigned char vel{64};				// Lautstärke / Velocity
-	unsigned char velVariance{0};		// Dient als Streuungswert für Vel genutzt werden
+	unsigned char velVariance{63};		// Dient als Streuungswert für Vel < 127 
 	unsigned char pitch{60};			// Tonhöhe
 	double tune{0.0};					// Feinabstimmung der Tonhöhe: Gibt das Verhältnis zum Viertelton t/1 an; also -1 < t < 1
 	note_value gate{note_value::T4TH};	// Gatezeit wird in Notenwerten angegeben 
