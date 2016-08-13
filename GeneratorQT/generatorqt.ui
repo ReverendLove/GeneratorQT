@@ -79,7 +79,7 @@
       <height>15</height>
      </rect>
     </property>
-    <layout class="QFormLayout" name="formLayout">
+    <layout class="QFormLayout" name="lytBPM">
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
@@ -90,7 +90,10 @@
      <item row="0" column="1">
       <widget class="QLabel" name="lblSpeed">
        <property name="text">
-        <string>BPM</string>
+        <string>bpm</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
        <property name="buddy">
         <cstring>slSpeed</cstring>
@@ -313,7 +316,7 @@
       <height>22</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="loMidiIn" stretch="1,4,0">
+    <layout class="QHBoxLayout" name="lytMidiIn" stretch="1,4,0">
      <property name="spacing">
       <number>5</number>
      </property>
@@ -345,7 +348,7 @@
       <height>22</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,4">
+    <layout class="QHBoxLayout" name="lytMidiOut" stretch="1,4">
      <property name="spacing">
       <number>5</number>
      </property>

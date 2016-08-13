@@ -38,18 +38,18 @@ public:
     QSpinBox *sbNumberOfDots;
     QSlider *slSpeed;
     QWidget *layoutWidget;
-    QFormLayout *formLayout;
+    QFormLayout *lytBPM;
     QLabel *label;
     QLabel *lblSpeed;
     QTableWidget *tblDots;
     QPushButton *btnStart;
     QWidget *layoutWidget1;
-    QHBoxLayout *loMidiIn;
+    QHBoxLayout *lytMidiIn;
     QLabel *lblMidiIn;
     QComboBox *cbMidiIn;
     QCheckBox *cbSync;
     QWidget *layoutWidget2;
-    QHBoxLayout *horizontalLayout;
+    QHBoxLayout *lytMidiOut;
     QLabel *lblMidiOut;
     QComboBox *cbMidiOut;
     QMenuBar *menuBar;
@@ -87,20 +87,21 @@ public:
         layoutWidget = new QWidget(wdgCentral);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
         layoutWidget->setGeometry(QRect(440, 400, 48, 15));
-        formLayout = new QFormLayout(layoutWidget);
-        formLayout->setSpacing(6);
-        formLayout->setContentsMargins(11, 11, 11, 11);
-        formLayout->setObjectName(QStringLiteral("formLayout"));
-        formLayout->setContentsMargins(0, 0, 0, 0);
+        lytBPM = new QFormLayout(layoutWidget);
+        lytBPM->setSpacing(6);
+        lytBPM->setContentsMargins(11, 11, 11, 11);
+        lytBPM->setObjectName(QStringLiteral("lytBPM"));
+        lytBPM->setContentsMargins(0, 0, 0, 0);
         label = new QLabel(layoutWidget);
         label->setObjectName(QStringLiteral("label"));
 
-        formLayout->setWidget(0, QFormLayout::LabelRole, label);
+        lytBPM->setWidget(0, QFormLayout::LabelRole, label);
 
         lblSpeed = new QLabel(layoutWidget);
         lblSpeed->setObjectName(QStringLiteral("lblSpeed"));
+        lblSpeed->setAlignment(Qt::AlignCenter);
 
-        formLayout->setWidget(0, QFormLayout::FieldRole, lblSpeed);
+        lytBPM->setWidget(0, QFormLayout::FieldRole, lblSpeed);
 
         tblDots = new QTableWidget(wdgCentral);
         if (tblDots->columnCount() < 7)
@@ -171,48 +172,48 @@ public:
         layoutWidget1 = new QWidget(wdgCentral);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
         layoutWidget1->setGeometry(QRect(10, 460, 501, 22));
-        loMidiIn = new QHBoxLayout(layoutWidget1);
-        loMidiIn->setSpacing(5);
-        loMidiIn->setContentsMargins(11, 11, 11, 11);
-        loMidiIn->setObjectName(QStringLiteral("loMidiIn"));
-        loMidiIn->setContentsMargins(0, 0, 0, 0);
+        lytMidiIn = new QHBoxLayout(layoutWidget1);
+        lytMidiIn->setSpacing(5);
+        lytMidiIn->setContentsMargins(11, 11, 11, 11);
+        lytMidiIn->setObjectName(QStringLiteral("lytMidiIn"));
+        lytMidiIn->setContentsMargins(0, 0, 0, 0);
         lblMidiIn = new QLabel(layoutWidget1);
         lblMidiIn->setObjectName(QStringLiteral("lblMidiIn"));
 
-        loMidiIn->addWidget(lblMidiIn);
+        lytMidiIn->addWidget(lblMidiIn);
 
         cbMidiIn = new QComboBox(layoutWidget1);
         cbMidiIn->setObjectName(QStringLiteral("cbMidiIn"));
 
-        loMidiIn->addWidget(cbMidiIn);
+        lytMidiIn->addWidget(cbMidiIn);
 
         cbSync = new QCheckBox(layoutWidget1);
         cbSync->setObjectName(QStringLiteral("cbSync"));
 
-        loMidiIn->addWidget(cbSync);
+        lytMidiIn->addWidget(cbSync);
 
-        loMidiIn->setStretch(0, 1);
-        loMidiIn->setStretch(1, 4);
+        lytMidiIn->setStretch(0, 1);
+        lytMidiIn->setStretch(1, 4);
         layoutWidget2 = new QWidget(wdgCentral);
         layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
         layoutWidget2->setGeometry(QRect(10, 500, 411, 22));
-        horizontalLayout = new QHBoxLayout(layoutWidget2);
-        horizontalLayout->setSpacing(5);
-        horizontalLayout->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        horizontalLayout->setContentsMargins(0, 0, 0, 0);
+        lytMidiOut = new QHBoxLayout(layoutWidget2);
+        lytMidiOut->setSpacing(5);
+        lytMidiOut->setContentsMargins(11, 11, 11, 11);
+        lytMidiOut->setObjectName(QStringLiteral("lytMidiOut"));
+        lytMidiOut->setContentsMargins(0, 0, 0, 0);
         lblMidiOut = new QLabel(layoutWidget2);
         lblMidiOut->setObjectName(QStringLiteral("lblMidiOut"));
 
-        horizontalLayout->addWidget(lblMidiOut);
+        lytMidiOut->addWidget(lblMidiOut);
 
         cbMidiOut = new QComboBox(layoutWidget2);
         cbMidiOut->setObjectName(QStringLiteral("cbMidiOut"));
 
-        horizontalLayout->addWidget(cbMidiOut);
+        lytMidiOut->addWidget(cbMidiOut);
 
-        horizontalLayout->setStretch(0, 1);
-        horizontalLayout->setStretch(1, 4);
+        lytMidiOut->setStretch(0, 1);
+        lytMidiOut->setStretch(1, 4);
         GeneratorQTClass->setCentralWidget(wdgCentral);
         menuBar = new QMenuBar(GeneratorQTClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -248,7 +249,7 @@ public:
     {
         GeneratorQTClass->setWindowTitle(QApplication::translate("GeneratorQTClass", "GeneratorQT", 0));
         label->setText(QApplication::translate("GeneratorQTClass", "BPM", 0));
-        lblSpeed->setText(QApplication::translate("GeneratorQTClass", "BPM", 0));
+        lblSpeed->setText(QApplication::translate("GeneratorQTClass", "bpm", 0));
         QTableWidgetItem *___qtablewidgetitem = tblDots->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("GeneratorQTClass", "Id", 0));
         QTableWidgetItem *___qtablewidgetitem1 = tblDots->horizontalHeaderItem(1);

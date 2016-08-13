@@ -5,13 +5,10 @@
 
 
 unsigned GeneratorQT::tickCounter{0};
-unsigned long long GeneratorQT::gSpeed{21}; // Global Speed in BPM
+volatile double GeneratorQT::gSpeed{21}; // Global Speed in BPM
 unsigned long long GeneratorQT::callBackCounter{0};
-LARGE_INTEGER GeneratorQT::start,
-				GeneratorQT::end,
-				GeneratorQT::elapsedMicroseconds,
-				GeneratorQT::frequency;
-
+QMutex GeneratorQT::mutex{};
+AStopWatch GeneratorQT::stopWatch(AStopWatch::unit::microseconds);
 
 GeneratorQT::GeneratorQT(QWidget *parent)
 	: QMainWindow(parent)
@@ -32,7 +29,7 @@ GeneratorQT::GeneratorQT(QWidget *parent)
 	}
 
 	try{
-		midiIn = new RtMidiIn();
+		midiIn = new RtMidiIn(RtMidi::UNSPECIFIED, "RtMidi Input Client",256);
 	}
 	catch(RtMidiError &error){
 		error.printMessage();
@@ -60,8 +57,7 @@ GeneratorQT::GeneratorQT(QWidget *parent)
 	ui.sbNumberOfDots->setValue(2);
 	ui.cbMidiIn->addItems(midiInPorts);
 	ui.cbMidiOut->addItems(midiOutPorts);
-	fillDotsTable();
-	QueryPerformanceFrequency(&frequency);
+	fillDotsTable();	
 }
 
 GeneratorQT::~GeneratorQT(){
@@ -102,8 +98,13 @@ void GeneratorQT::dotsNumChanged(){
 
 void GeneratorQT::slSpeedChanged(int b){
 	if(timer != nullptr){
-		timer->start(bpm_to_msec_per_tic(b));
-		gSpeed = bpm_to_msec_per_tic(b);
+		if(!synced){
+			gSpeed = bpm_to_msec_per_tic(b);
+			timer->setInterval(gSpeed);
+		}
+		
+		
+		
 	}
 }
 
@@ -142,7 +143,7 @@ void GeneratorQT::editDot(){
 
 void GeneratorQT::startStop(bool btnState){
 	if(btnState == true){
-		timer->start(gSpeed);
+		timer->start(round(gSpeed));
 		ui.btnStart->setText("Stop!");
 		runState = true;
 	}
@@ -169,11 +170,15 @@ void GeneratorQT::externalSync(bool b){
 	if(b){
 		if(!midiIn->isPortOpen())
 			midiIn->openPort(ui.cbMidiIn->currentIndex());
-		midiIn->setCallback(&midiInCallback);
+		midiIn->setCallback(&midiInCallback, dynamic_cast<void*>(this));
 		midiIn->ignoreTypes(true, false, false);
+		timer->stop();
+		synced = true;
 	}
 	else{
 		midiIn->cancelCallback();
+		timer->start(round(gSpeed));
+		synced = false;
 	}
 }
 
@@ -241,16 +246,22 @@ void GeneratorQT::timerEvent(){
 				break;
 			}
 		}
-		matrix[d.X()][d.Y()] = 1;
-		update();
+		if(synced){
+			// Erst aufrufen wenn kein weiterer Event dazwischen funkt.
+			QTimer::singleShot(0, Qt::PreciseTimer, this, SLOT(update()));
+		}
+		else{
+			update();
+		}
+		
 	}
-	tickCounter++;
+	{	QMutexLocker lock(&mutex);
+		tickCounter++;
+	}
 	fillMatrix();
 }
 
 void GeneratorQT::paintEvent(QPaintEvent *event){
-	QMainWindow::update();
-	
 	// Schachbrett zeichnen
 	QPainter p(this);
 	QRect rect = ui.wdgCentral->rect();
@@ -298,36 +309,40 @@ void GeneratorQT::paintEvent(QPaintEvent *event){
 		sId.setNum(ad.Id());
 		p.drawText(pt, sId);
 	}
-	ui.slSpeed->setValue(round(2500/gSpeed));
+	ui.slSpeed->setValue(round(2500.0/gSpeed));
 }
 
 void GeneratorQT::midiInCallback(double deltatime, std::vector<unsigned char>* message, void * userData){
 	if(message->size() > 0){
-		switch((*message)[0]){
-		case 248:
+		unsigned char message_id = (*message)[0];
+		if(message_id == 248){
+			// Hier werden die durchschnittlichen msec/Tick über eine Viertelnote (24 Ticks) ermittelt
 			if(callBackCounter == 0){
-				QueryPerformanceCounter(&start);
+				stopWatch.Start();
 			}
 			else{
-				if(callBackCounter % 24 == 0){ //Durchschnitt für 24 Ticks berechnen
-					QueryPerformanceCounter(&end);
-					elapsedMicroseconds.QuadPart = end.QuadPart - start.QuadPart;
-					double delta = (elapsedMicroseconds.QuadPart * 1000000) / frequency.QuadPart;
-					gSpeed = delta / 1000 / 24; // msec für einen Tick in static-Variablen gSpeed ablegen	
-					QueryPerformanceCounter(&start);
+				if(callBackCounter % 24 == 0){ //Durchschnitt alle 24 Ticks berechnen
+					gSpeed = stopWatch.Stop() / 24000.0; // msec für einen Tick in static-Variablen gSpeed ablegen					
+					stopWatch.Start();
 				}
 			}
+			{	QMutexLocker lock(&mutex);
 			callBackCounter++;
-			break;
-		case 144:	// Note On / Achtung! Kanalnummer berücksichtigen.
-		case 128:	// Note Off / Achtung! Kanalnummer berücksichtigen.
-		case 176:	// Controller / Achtung! Kanalnummer berücksichtigen.
-			break;
+			}
+			if(userData != nullptr)
+				(static_cast<GeneratorQT*>(userData)->timerEvent());
+			return;
 		}
-	}
+		//switch(message_id & 0xF0){//Kanalnummer ausmaskieren
+		//case 144:	// Note On 
+		//case 128:	// Note Off
+		//case 176:	// Controller
+		//	break;
+		//}
+	}	
 }
 
-void GeneratorQT::fillMatrix(){
+void GeneratorQT::fillMatrix(){	
 	for(int i = 0; i < 8; i++){
 		for(int j = 0; j < 8; j++){
 			matrix[i][j] = 0; 
@@ -361,7 +376,7 @@ void GeneratorQT::rollPos(ADot & d){
 	// Anfangspunkt für die Suche nach einem freien Feld ist einer Springerbewegung beim Schach gleich
 	// Bei Überschreiten der Spielfeldgrenzen wird ganz links und/oder ganz oben
 	// mit der Suche begonnen.
-	int ix, jy;
+	int ix{0}, jy{0};
 	switch(d.Dir()){
 	case ADot::UP:
 		ix = (d.X() + 1) % 8;
@@ -378,7 +393,7 @@ void GeneratorQT::rollPos(ADot & d){
 	case ADot::RIGHT:
 		ix = d.X() > 1 ? (d.X() - 2) % 8 : (d.X() + 7) % 8;;
 		jy = (d.Y() + 1) % 8;
-		break;
+		break;		
 	}
 	
 	

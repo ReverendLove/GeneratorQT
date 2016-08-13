@@ -33,19 +33,19 @@ public:
     QComboBox *cbGate;
     QLabel *lblGate;
     QWidget *layoutWidget;
-    QHBoxLayout *horizontalLayout;
+    QHBoxLayout *lytNote;
     QComboBox *cbNote;
     QLabel *lblNote;
     QWidget *layoutWidget_2;
-    QHBoxLayout *horizontalLayout_3;
+    QHBoxLayout *lytVarianz;
     QLabel *lblVarianzValue;
     QSlider *slVarianz;
     QWidget *layoutWidget1;
-    QHBoxLayout *horizontalLayout_2;
+    QHBoxLayout *lytVelocity;
     QLabel *lblVelocityValue;
     QSlider *slVelocity;
     QWidget *layoutWidget2;
-    QHBoxLayout *horizontalLayout_4;
+    QHBoxLayout *lytVelVar;
     QLabel *lblVelocity;
     QLabel *lblVarianz;
     QLabel *lblDotId;
@@ -75,53 +75,53 @@ public:
         layoutWidget = new QWidget(dlgDotEdit);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
         layoutWidget->setGeometry(QRect(11, 11, 124, 22));
-        horizontalLayout = new QHBoxLayout(layoutWidget);
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        horizontalLayout->setContentsMargins(0, 0, 0, 0);
+        lytNote = new QHBoxLayout(layoutWidget);
+        lytNote->setSpacing(6);
+        lytNote->setContentsMargins(11, 11, 11, 11);
+        lytNote->setObjectName(QStringLiteral("lytNote"));
+        lytNote->setContentsMargins(0, 0, 0, 0);
         cbNote = new QComboBox(layoutWidget);
         cbNote->setObjectName(QStringLiteral("cbNote"));
 
-        horizontalLayout->addWidget(cbNote);
+        lytNote->addWidget(cbNote);
 
         lblNote = new QLabel(layoutWidget);
         lblNote->setObjectName(QStringLiteral("lblNote"));
 
-        horizontalLayout->addWidget(lblNote);
+        lytNote->addWidget(lblNote);
 
         layoutWidget_2 = new QWidget(dlgDotEdit);
         layoutWidget_2->setObjectName(QStringLiteral("layoutWidget_2"));
         layoutWidget_2->setGeometry(QRect(220, 10, 67, 211));
-        horizontalLayout_3 = new QHBoxLayout(layoutWidget_2);
-        horizontalLayout_3->setSpacing(6);
-        horizontalLayout_3->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
-        horizontalLayout_3->setContentsMargins(0, 0, 0, 0);
+        lytVarianz = new QHBoxLayout(layoutWidget_2);
+        lytVarianz->setSpacing(6);
+        lytVarianz->setContentsMargins(11, 11, 11, 11);
+        lytVarianz->setObjectName(QStringLiteral("lytVarianz"));
+        lytVarianz->setContentsMargins(0, 0, 0, 0);
         lblVarianzValue = new QLabel(layoutWidget_2);
         lblVarianzValue->setObjectName(QStringLiteral("lblVarianzValue"));
 
-        horizontalLayout_3->addWidget(lblVarianzValue);
+        lytVarianz->addWidget(lblVarianzValue);
 
         slVarianz = new QSlider(layoutWidget_2);
         slVarianz->setObjectName(QStringLiteral("slVarianz"));
         slVarianz->setMaximum(47);
         slVarianz->setOrientation(Qt::Vertical);
 
-        horizontalLayout_3->addWidget(slVarianz);
+        lytVarianz->addWidget(slVarianz);
 
         layoutWidget1 = new QWidget(dlgDotEdit);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
         layoutWidget1->setGeometry(QRect(150, 10, 67, 211));
-        horizontalLayout_2 = new QHBoxLayout(layoutWidget1);
-        horizontalLayout_2->setSpacing(6);
-        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
-        horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
+        lytVelocity = new QHBoxLayout(layoutWidget1);
+        lytVelocity->setSpacing(6);
+        lytVelocity->setContentsMargins(11, 11, 11, 11);
+        lytVelocity->setObjectName(QStringLiteral("lytVelocity"));
+        lytVelocity->setContentsMargins(0, 0, 0, 0);
         lblVelocityValue = new QLabel(layoutWidget1);
         lblVelocityValue->setObjectName(QStringLiteral("lblVelocityValue"));
 
-        horizontalLayout_2->addWidget(lblVelocityValue);
+        lytVelocity->addWidget(lblVelocityValue);
 
         slVelocity = new QSlider(layoutWidget1);
         slVelocity->setObjectName(QStringLiteral("slVelocity"));
@@ -129,29 +129,29 @@ public:
         slVelocity->setValue(80);
         slVelocity->setOrientation(Qt::Vertical);
 
-        horizontalLayout_2->addWidget(slVelocity);
+        lytVelocity->addWidget(slVelocity);
 
         layoutWidget2 = new QWidget(dlgDotEdit);
         layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
         layoutWidget2->setGeometry(QRect(150, 220, 141, 20));
-        horizontalLayout_4 = new QHBoxLayout(layoutWidget2);
-        horizontalLayout_4->setSpacing(6);
-        horizontalLayout_4->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
-        horizontalLayout_4->setContentsMargins(0, 0, 0, 0);
+        lytVelVar = new QHBoxLayout(layoutWidget2);
+        lytVelVar->setSpacing(6);
+        lytVelVar->setContentsMargins(11, 11, 11, 11);
+        lytVelVar->setObjectName(QStringLiteral("lytVelVar"));
+        lytVelVar->setContentsMargins(0, 0, 0, 0);
         lblVelocity = new QLabel(layoutWidget2);
         lblVelocity->setObjectName(QStringLiteral("lblVelocity"));
         QFont font;
         font.setPointSize(10);
         lblVelocity->setFont(font);
 
-        horizontalLayout_4->addWidget(lblVelocity);
+        lytVelVar->addWidget(lblVelocity);
 
         lblVarianz = new QLabel(layoutWidget2);
         lblVarianz->setObjectName(QStringLiteral("lblVarianz"));
         lblVarianz->setFont(font);
 
-        horizontalLayout_4->addWidget(lblVarianz);
+        lytVelVar->addWidget(lblVarianz);
 
         lblDotId = new QLabel(dlgDotEdit);
         lblDotId->setObjectName(QStringLiteral("lblDotId"));
@@ -180,6 +180,10 @@ public:
         lblGate->setBuddy(cbGate);
         lblNote->setBuddy(cbNote);
 #endif // QT_NO_SHORTCUT
+        QWidget::setTabOrder(cbNote, cbValue);
+        QWidget::setTabOrder(cbValue, cbGate);
+        QWidget::setTabOrder(cbGate, slVelocity);
+        QWidget::setTabOrder(slVelocity, slVarianz);
 
         retranslateUi(dlgDotEdit);
         QObject::connect(buttonBox, SIGNAL(accepted()), dlgDotEdit, SLOT(accept()));

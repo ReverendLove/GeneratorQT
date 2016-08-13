@@ -62,6 +62,9 @@
     <ClCompile Include="ADot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AStopWatch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="generatorqt.h">
@@ -91,6 +94,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RtMidi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AStopWatch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

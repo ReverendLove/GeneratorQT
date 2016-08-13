@@ -10,6 +10,8 @@
 #include <chrono>
 #include <QTimer>
 #include <math.h>
+#include <qmutex.h>
+#include "AStopWatch.h"
 
 class GeneratorQT : public QMainWindow
 {
@@ -19,9 +21,8 @@ public:
 	GeneratorQT(QWidget *parent = 0);
 	~GeneratorQT();
 
-	int bpm_to_msec_per_tic(int bpm = 120){
-		double dmsec = (dmsec = 2500 / bpm);
-		return round(dmsec);
+	double bpm_to_msec_per_tic(int bpm = 120){
+		return 2500.0 / bpm;		
 	};
 
 
@@ -41,14 +42,13 @@ private:
 	Ui::GeneratorQTClass ui;
 	
 	bool runState{false};
+	bool synced{false};
 	static unsigned tickCounter;
-	static unsigned long long gSpeed; // Global Speed in BPM
+	static volatile double gSpeed; // Global Speed in BPM
 	static unsigned long long callBackCounter;
-	static LARGE_INTEGER	start, 
-							end, 
-							elapsedMicroseconds,
-							frequency;
-
+	static AStopWatch stopWatch;
+	static QMutex mutex;
+	
 	std::array<std::array<int, 8>, 8> matrix{};
 	std::vector<ADot> dots{};
 

@@ -90,7 +90,7 @@
      <height>22</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QHBoxLayout" name="lytNote">
     <item>
      <widget class="QComboBox" name="cbNote"/>
     </item>
@@ -115,7 +115,7 @@
      <height>211</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_3">
+   <layout class="QHBoxLayout" name="lytVarianz">
     <item>
      <widget class="QLabel" name="lblVarianzValue">
       <property name="text">
@@ -144,7 +144,7 @@
      <height>211</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <layout class="QHBoxLayout" name="lytVelocity">
     <item>
      <widget class="QLabel" name="lblVelocityValue">
       <property name="text">
@@ -176,7 +176,7 @@
      <height>20</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_4">
+   <layout class="QHBoxLayout" name="lytVelVar">
     <item>
      <widget class="QLabel" name="lblVelocity">
       <property name="font">
@@ -247,6 +247,13 @@
   <zorder>lblDotId</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>cbNote</tabstop>
+  <tabstop>cbValue</tabstop>
+  <tabstop>cbGate</tabstop>
+  <tabstop>slVelocity</tabstop>
+  <tabstop>slVarianz</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
