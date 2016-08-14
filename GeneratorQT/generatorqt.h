@@ -6,7 +6,6 @@
 #include "RtMidi.h"
 #include <vector>
 #include <string>
-#include <chrono>
 #include <QTimer>
 #include <math.h>
 #include "AStopWatch.h"

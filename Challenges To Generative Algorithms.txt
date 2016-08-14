@@ -1,0 +1,37 @@
+– convert decimal to binary, tertiary, quartiery
+– change every nth input 
+– compare two streams to make decisions
+– probability for events
+– randomness for events
+– human interface for events
+– all kinds of scaling and range distortion
+– chord progressions
+– population growth
+– circulation
+– lorenz attractor
+– markov chains
+– lfos/envelopes/gates
+– modulation around center: linear/gauss/drunk
+– cellular automatas
+– multiplication and addition
+– controlled errors
+– distribution of data onto different channels
+– recogisation of certain numbers/chords/rythms
+– filter for certain numbers/chords/rythms
+– physical movement/modelling
+– magic square
+– golden mean
+– primes
+– control amount of data, lenght of lists
+– counting, repeating, looping
+– remebering and forgetting
+– seperate and combine operations across musical elements
+– the 70ies classics: autochord, arpeggio,…
+– all kind of mutations of and morphs between values/streams
+– multiple and nonlinear masterclocks (very important) 
+– different tuning scales (very important)
+– mapping tables, where calculation no longer work
+– realtime time manipulation (delays, "shuffle", "humanize")
+– checks for similarity or "contrast"
+– linking events or excluding events
+– fold, wrap, limit, mean, average and weighten numbers/lists
