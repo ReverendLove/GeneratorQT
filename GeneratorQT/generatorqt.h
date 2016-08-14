@@ -1,6 +1,5 @@
 #ifndef GENERATORQT_H
 #define GENERATORQT_H
-#include <windows.h>
 #include <QtWidgets/QMainWindow>
 #include "ui_generatorqt.h"
 #include "ADot.h"
@@ -10,7 +9,6 @@
 #include <chrono>
 #include <QTimer>
 #include <math.h>
-#include <qmutex.h>
 #include "AStopWatch.h"
 
 class GeneratorQT : public QMainWindow
@@ -24,6 +22,9 @@ public:
 	double bpm_to_msec_per_tic(int bpm = 120){
 		return 2500.0 / bpm;		
 	};
+	bool Synced(){
+		return synced;
+	}
 
 
 public slots:
@@ -47,7 +48,6 @@ private:
 	static volatile double gSpeed; // Global Speed in BPM
 	static unsigned long long callBackCounter;
 	static AStopWatch stopWatch;
-	static QMutex mutex;
 	
 	std::array<std::array<int, 8>, 8> matrix{};
 	std::vector<ADot> dots{};

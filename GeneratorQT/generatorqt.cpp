@@ -7,13 +7,12 @@
 unsigned GeneratorQT::tickCounter{0};
 volatile double GeneratorQT::gSpeed{21}; // Global Speed in BPM
 unsigned long long GeneratorQT::callBackCounter{0};
-QMutex GeneratorQT::mutex{};
 AStopWatch GeneratorQT::stopWatch(AStopWatch::unit::microseconds);
 
 GeneratorQT::GeneratorQT(QWidget *parent)
 	: QMainWindow(parent)
 {
-	srand(unsigned(time(0)));
+	srand(unsigned(stopWatch.Now()));
 	
 	for(int i = 0; i < 2; i++){
 		ADot d;
@@ -101,10 +100,7 @@ void GeneratorQT::slSpeedChanged(int b){
 		if(!synced){
 			gSpeed = bpm_to_msec_per_tic(b);
 			timer->setInterval(gSpeed);
-		}
-		
-		
-		
+		}		
 	}
 }
 
@@ -143,16 +139,18 @@ void GeneratorQT::editDot(){
 
 void GeneratorQT::startStop(bool btnState){
 	if(btnState == true){
-		timer->start(round(gSpeed));
+		if(!synced)
+			timer->start(round(gSpeed));
 		ui.btnStart->setText("Stop!");
 		runState = true;
+
 	}
 	else{
-		timer->stop();
+		if(!synced)
+			timer->stop();
 		ui.btnStart->setText("Start!");
 		runState = false;
 	}
-
 }
 
 void GeneratorQT::midiInChanged(int mi){
@@ -168,17 +166,19 @@ void GeneratorQT::midiOutChanged(int mi){
 void GeneratorQT::externalSync(bool b){
 	b = ui.cbSync->checkState();
 	if(b){
-		if(!midiIn->isPortOpen())
-			midiIn->openPort(ui.cbMidiIn->currentIndex());
-		midiIn->setCallback(&midiInCallback, dynamic_cast<void*>(this));
-		midiIn->ignoreTypes(true, false, false);
 		timer->stop();
+		if(midiIn->isPortOpen()){
+			midiIn->closePort();
+		}
+		midiIn->setCallback(&midiInCallback, dynamic_cast<void*>(this));
+		midiIn->openPort(ui.cbMidiIn->currentIndex());
+		midiIn->ignoreTypes(true, false, false);
 		synced = true;
 	}
 	else{
 		midiIn->cancelCallback();
-		timer->start(round(gSpeed));
 		synced = false;
+		timer->start(round(gSpeed));
 	}
 }
 
@@ -255,9 +255,7 @@ void GeneratorQT::timerEvent(){
 		}
 		
 	}
-	{	QMutexLocker lock(&mutex);
-		tickCounter++;
-	}
+	tickCounter++;
 	fillMatrix();
 }
 
@@ -315,7 +313,7 @@ void GeneratorQT::paintEvent(QPaintEvent *event){
 void GeneratorQT::midiInCallback(double deltatime, std::vector<unsigned char>* message, void * userData){
 	if(message->size() > 0){
 		unsigned char message_id = (*message)[0];
-		if(message_id == 248){
+		if(message_id == 248){ // Midiclock
 			// Hier werden die durchschnittlichen msec/Tick über eine Viertelnote (24 Ticks) ermittelt
 			if(callBackCounter == 0){
 				stopWatch.Start();
@@ -326,11 +324,10 @@ void GeneratorQT::midiInCallback(double deltatime, std::vector<unsigned char>* m
 					stopWatch.Start();
 				}
 			}
-			{	QMutexLocker lock(&mutex);
 			callBackCounter++;
-			}
 			if(userData != nullptr)
-				(static_cast<GeneratorQT*>(userData)->timerEvent());
+				if(static_cast<GeneratorQT*>(userData)->Synced())
+					(static_cast<GeneratorQT*>(userData)->timerEvent());
 			return;
 		}
 		//switch(message_id & 0xF0){//Kanalnummer ausmaskieren
