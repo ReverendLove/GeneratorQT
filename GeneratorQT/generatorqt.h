@@ -6,8 +6,8 @@
 #include "RtMidi.h"
 #include <vector>
 #include <string>
-#include <QTimer>
 #include <math.h>
+#include <qtimer.h> 
 #include "AStopWatch.h"
 
 class GeneratorQT : public QMainWindow

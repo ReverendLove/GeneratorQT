@@ -103,5 +103,6 @@
   <ItemGroup>
     <Library Include="rtmidid.lib" />
     <Library Include="WinMM.Lib" />
+    <Library Include="rtmidi.lib" />
   </ItemGroup>
 </Project>
